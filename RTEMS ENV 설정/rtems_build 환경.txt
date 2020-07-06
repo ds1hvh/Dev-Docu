@@ -1,0 +1,83 @@
+M910q 10MUA03PKR
+
+ION RTEM Installation Script
+
+$ mkdir  –p  ~/MyWorks/rtems
+$ cd MyWorks/rtems
+$ sudo  apt-get  update
+$ sudo  apt-get  upgrade
+$ sudo  apt-get  install build-essential
+$ sudo  apt-get  install git
+$ sudo  apt-get  install python-dev
+$ sudo  apt-get  build-dep  binutils  gcc  g++  gdb  unzip  git  python2.7-dev
+=> 에러(E: You must put some 'source' URIs in your sources.list)가 발생 시 work around 1 부분의 내용 실행
+
+Work around 1 : 
+$ cd
+$ sudo su -c "grep '^deb ' /etc/apt/sources.list | sed 's/^deb/deb-src/g' > /etc/apt/sources.list.d/deb-src.list"
+$ sudo  apt  update  -y
+$ mkdir linux
+$ cd linux
+$ apt source linux
+
+Work around 의 내용 정상 설치 후 아래의 명령 재 실행해 필요한 프로그램 설치
+$ sudo  apt-get  build-dep  binutils  gcc  g++  gdb  unzip  git  python2.7-dev
+
+RSS Build
+
+$ cd /MyWorks/rtems
+$ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.3/rtems-source-builder-4.11.3.tar.xz
+$ tar -xvf rtems-source-builder-4.11.3.tar.xz
+$ mv rtems-source-builder-4.11.3 rsb
+$ cd rsb
+$ source-builder/sb-check // 환경 설정이 정상적으로 되었는지 확인 한다. 정상일 경우 Enviroment is ok 표시됨. 
+$ cd rtems
+$ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/rtems4.11 4.11/rtems-sparc
+(권한 문제가 발생하면 sudo 로 실행 한다. )
+빌드가 끝나면 prefix로 지정된 폴더에서 RSB를 확인 할 수 있음 RBS의 bin폴더를 PATH에 추가
+
+<<- 여기까지 진행 함. 
+
+
+
+
+$ gedit ~/.bashrc
+
+다음 내용을 .bashrc 마지막에 추가
+export  PATH=$HOME/MyWorks/rtems/rtems4.11/bin:$PATH
+
+
+다음 명령을 실행하여 RSB의 sparc-rtems4.11-gcc가 제대로 동작하는지 확인
+$ source ~/.bashrc
+$ sparc-rtems4.11-gcc –v
+
+RTEMS 소스 다운로드
+
+$ cd  $HOME/MyWorks/rtems
+$ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.3/rtems-4.11.3.tar.xz
+$ tar -xvf rtems-4.11.3.tar.xz
+$ mv rtems-4.11.3 rtems-src
+$ cd  rtems-src/
+$ ./bootstrap
+
+특정 bsp로 RTEMS를 빌드
+$ cd  $HOME/MyWorks/rtems
+$ mkdir build
+$ cd build/
+$ ../rtems-src/configure –-target=sparc-rtems4.11 –-enable-rtemsbsp=leon3 –enable-tests=samples –prefix=$HOME/MyWorks/rtems/rtems4.11
+$ make && make install
+
+마지막 configure 할 때 prefix는 RSB를 빌드할 때와 똑같이 설정해야 함, 다음 코드를 ~./bashrc에 추가
+$cd 
+
+
+
+
+
+
+
+
+
+
+
+
