@@ -1,5 +1,3 @@
-M910q 10MUA03PKR
-
 ION RTEM Installation Script
 
 $ mkdir  –p  ~/MyWorks/rtems
@@ -65,6 +63,26 @@ $ make && make install
 
 마지막 configure 할 때 prefix는 RSB를 빌드할 때와 똑같이 설정해야 함, 다음 코드를 ~./bashrc에 추가
 $cd 
+
+ION Build
+
+1. ION 설치된 경로에서 arch-rtems 이동
+$ cd arch-rtems
+
+2. srclinks를 이용하여 make에 필요한 파일을 arch-rtems 디렉토리로 링크 연결
+   (arch-rtems 디렉토리에 c파일들 추가되는 것 확인)
+$ ./srclinks
+
+3. Make를 실행하여 o-optimize 폴더에 ion.exe 생성되는것을 확인
+$ make
+
+cf>
+rtems_bsdnet_loopattach를 찾을 수 없다고 나오는데, 
+rtems 4.11.3버전에서 rtems_bsdnet_loopattach를 지원하지 않아서 
+생기는 문제라고 판단됨
+<Work Around>
+ionrtems.c에서 해당 내용을 주석처리
+
 
 
 
