@@ -35,11 +35,7 @@ $ cd rtems
 $ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/rtems4.11 4.11/rtems-sparc
 (권한 문제가 발생하면 sudo 로 실행 한다. )
 빌드가 끝나면 prefix로 지정된 폴더에서 RSB를 확인 할 수 있음 RBS의 bin폴더를 PATH에 추가
-
 <<- 여기까지 진행 함. 
-
-
-
 
 $ gedit ~/.bashrc
 
