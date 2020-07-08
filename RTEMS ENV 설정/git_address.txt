@@ -46,3 +46,11 @@ https://github.com/luigif/hcsr04.git
 https://github.com/phaezah7/UART.git
 https://github.com/archie1983/AM335x_PRU_experiments.git
 https://github.com/LinuxDroneLab/pru-mpu6050-lib.git
+
+
+>IPC
+https://gist.github.com/914625.git
+https://gist.github.com/de1915e4d6502ae4c4d7.git
+
+reference site (Very useful)
+https://www.tutorialspoint.com/inter_process_communication/inter_process_communication_message_queues.htm

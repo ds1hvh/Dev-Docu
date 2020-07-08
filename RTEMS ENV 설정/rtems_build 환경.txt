@@ -1,49 +1,70 @@
-ION RTEM Installation Script
+RTEMS & ION-DTN Installation Script
+
+1. 사전 준비 사항
+
+1. WSL SSH 설정
+openssh-server 재거 후 재 설치
+$ sudo apt purge openssh-server
+$ sudo apt install openssh-server
+
+$ nano /etc/ssh/sshd_config 에서 하기의 값을 수정 한다.
+
+Port 22
+PasswordAuthentication yes
+
+저장 후 service를 재 시작 한다. 
+
+$ sudo service ssh --full-restart
+
+==============================================================
+2. 개발 경로 설정 
+wsl 로 개발 할 경우 windows내 개발 폴더를 wsl 내부에 심볼링크해 주면 편함. 
+
+ln -s "/mnt/d/MyWorks" /home/<my-wsl-username>/MyWorks
+
+
+rtems install path    : ~/MyWorks/rtems
+ION-DTN install path  : ~/MyWorks/ION-DTN
+
+==============================================================
 
 $ mkdir  –p  ~/MyWorks/rtems
 $ cd MyWorks/rtems
-$ sudo  apt-get  update
-$ sudo  apt-get  upgrade
-$ sudo  apt-get  install build-essential
-$ sudo  apt-get  install git
-$ sudo  apt-get  install python-dev
-$ sudo  apt-get  build-dep  binutils  gcc  g++  gdb  unzip  git  python2.7-dev
-=> 에러(E: You must put some 'source' URIs in your sources.list)가 발생 시 work around 1 부분의 내용 실행
-
-Work around 1 : 
-$ cd
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt-get install build-essential
+$ sudo apt-get install git
+$ sudo apt-get install python-dev
 $ sudo su -c "grep '^deb ' /etc/apt/sources.list | sed 's/^deb/deb-src/g' > /etc/apt/sources.list.d/deb-src.list"
-$ sudo  apt  update  -y
-$ mkdir linux
-$ cd linux
-$ apt source linux
+$ sudo apt update  -y
+$ sudo apt-get build-dep  binutils  gcc  g++  gdb  unzip  git  python2.7-dev
 
-Work around 의 내용 정상 설치 후 아래의 명령 재 실행해 필요한 프로그램 설치
-$ sudo  apt-get  build-dep  binutils  gcc  g++  gdb  unzip  git  python2.7-dev
 
-RSS Build
+RSB Build
 
 $ cd /MyWorks/rtems
 $ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.3/rtems-source-builder-4.11.3.tar.xz
-$ tar -xvf rtems-source-builder-4.11.3.tar.xz
+$ tar Jxf rtems-source-builder-4.11.3.tar.xz
 $ mv rtems-source-builder-4.11.3 rsb
 $ cd rsb
 $ source-builder/sb-check // 환경 설정이 정상적으로 되었는지 확인 한다. 정상일 경우 Enviroment is ok 표시됨. 
 $ cd rtems
-$ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/rtems4.11 4.11/rtems-sparc
-(권한 문제가 발생하면 sudo 로 실행 한다. )
+$ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/rtems4.11 4.11/rtems-sparc  //(SR.CHOI - 권한 문제가 발생하면 sudo 로 실행 한다. )
+  
 빌드가 끝나면 prefix로 지정된 폴더에서 RSB를 확인 할 수 있음 RBS의 bin폴더를 PATH에 추가
-<<- 여기까지 진행 함. 
 
-$ gedit ~/.bashrc
 
 다음 내용을 .bashrc 마지막에 추가
+$ nano ~/.bashrc
+마지막 줄에 하기 내용 삽입
 export  PATH=$HOME/MyWorks/rtems/rtems4.11/bin:$PATH
-
+export  RTEMS_MAKEFILE_PATH=$HOME/MyWorks/rtems/rtems4.11/sparc-rtems4.11/leon3
 
 다음 명령을 실행하여 RSB의 sparc-rtems4.11-gcc가 제대로 동작하는지 확인
 $ source ~/.bashrc
 $ sparc-rtems4.11-gcc –v
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 RTEMS 소스 다운로드
 
@@ -53,16 +74,22 @@ $ tar -xvf rtems-4.11.3.tar.xz
 $ mv rtems-4.11.3 rtems-src
 $ cd  rtems-src/
 $ ./bootstrap
+(./bootstrap -c && ./bootstrap -p && $HOME/MyWorks/rtems/rsb/source-builder/sb-boostrap)
+cd 
 
 특정 bsp로 RTEMS를 빌드
 $ cd  $HOME/MyWorks/rtems
 $ mkdir build
 $ cd build/
-$ ../rtems-src/configure –-target=sparc-rtems4.11 –-enable-rtemsbsp=leon3 –enable-tests=samples –prefix=$HOME/MyWorks/rtems/rtems4.11
+$ ../rtems-src/configure --target=sparc-rtems4.11 --enable-rtemsbsp=leon3 --enable-tests=samples --prefix=$HOME/MyWorks/rtems/rtems4.11
+(Another case>> $HOME/MyWorks/rtems/rtems-src/configure --prefix=$HOME/MyWorks/rtems/rtems4.11 --target=sparc-rtems4.11 --enable-rtemsbsp=leon3 --enable-posix --disable-networking)
+<<- 여기까지 진행 함. 
+
 $ make && make install
 
 마지막 configure 할 때 prefix는 RSB를 빌드할 때와 똑같이 설정해야 함, 다음 코드를 ~./bashrc에 추가
 $cd 
+
 
 ION Build
 
@@ -94,4 +121,5 @@ ionrtems.c에서 해당 내용을 주석처리
 
 
 
-
+//////////////////
+$ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.0/rtems-source-builder-4.11.0.tar.xz
