@@ -39,9 +39,6 @@ $ sudo su -c "grep '^deb ' /etc/apt/sources.list | sed 's/^deb/deb-src/g' > /etc
 $ sudo apt update  -y
 $ sudo apt-get build-dep  binutils  gcc  g++  gdb  unzip  git  python2.7-dev
 
-
-RSB Build
-
 $ cd /MyWorks/rtems
 $ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.3/rtems-source-builder-4.11.3.tar.xz
 $ tar Jxf rtems-source-builder-4.11.3.tar.xz
@@ -123,3 +120,170 @@ ionrtems.c에서 해당 내용을 주석처리
 
 //////////////////
 $ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.0/rtems-source-builder-4.11.0.tar.xz
+
+
+RSB Build 
+What is the RSB( RTEMS Source Builder)
+The RTEMS Source Builder or RSB is a tool to build packages from source.
+It is used by the RTEMS project to build it’s compilers and OS
+The RSB helps consolidate the details you need to build a package from source in a controlled and verifiable way. 
+There is no need to become root or the administrator and we recommend you avoid doing this. 
+
+== Below are the list you need to install. =============
+$ sudo apt-get build-dep binutils gcc g++ gdb unzip git
+$ sudo apt-get install python2.7-dev
+========================================================
+Do not forget to set the path before you use the tools, for example to build the RTEMS kernel.
+$ export PATH=$HOME/development/rtems/4.11/bin:$PATH
+
+Make sure you place the RTEMS tool path at the front of your path so they are searched first. 
+
+Setup a development work space:
+$ cd
+$ mkdir -p development/rtems/src
+$ cd development/rtems/src
+
+The RTEMS Source Builder is distributed as source. 
+
+$ git clone git://git.rtems.org/rtems-source-builder.git
+$ cd rtems-source-builder
+
+The next step is to check if your host is set up correctly.
+
+$ source-builder/sb-check
+
+$ cd rtems
+
+$ ../source-builder/sb-set-builder --list-bsets
+
+$ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/development/rtems/4.11 4.11/rtems-sparc
+
+$ ls $HOME/development/rtems/4.11
+bin         include     lib         libexec     share       sparc-rtems4.11
+$ ls $HOME/development/rtems/4.11/bin
+sparc-rtems4.11-addr2line       sparc-rtems4.11-cpp
+sparc-rtems4.11-gcc-ar          sparc-rtems4.11-gprof
+sparc-rtems4.11-objdump         sparc-rtems4.11-size
+sparc-rtems4.11-ar              sparc-rtems4.11-elfedit
+sparc-rtems4.11-gcc-nm          sparc-rtems4.11-ld
+sparc-rtems4.11-ranlib          sparc-rtems4.11-strings
+sparc-rtems4.11-as              sparc-rtems4.11-g++
+sparc-rtems4.11-gcc-ranlib      sparc-rtems4.11-ld.bfd
+sparc-rtems4.11-readelf         sparc-rtems4.11-strip
+sparc-rtems4.11-c++             sparc-rtems4.11-gcc
+sparc-rtems4.11-gcov            sparc-rtems4.11-nm
+sparc-rtems4.11-run             xmlwf
+sparc-rtems4.11-c++filt         sparc-rtems4.11-gcc-4.7.2
+sparc-rtems4.11-gdb             sparc-rtems4.11-objcopy
+sparc-rtems4.11-sis
+
+$ $HOME/development/rtems/4.11/bin/sparc-rtems4.11-gcc -v
+
+Using built-in specs.
+COLLECT_GCC=/home/chris/development/rtems/4.11/bin/sparc-rtems4.11-gcc
+COLLECT_LTO_WRAPPER=/usr/home/chris/development/rtems/4.11/bin/../ \
+libexec/gcc/sparc-rtems4.11/4.7.2/lto-wrapper
+Target: sparc-rtems4.11                         
+Configured with: ../gcc-4.7.2/configure         
+--prefix=/home/chris/development/rtems/4.11
+--bindir=/home/chris/development/rtems/4.11/bin
+--exec_prefix=/home/chris/development/rtems/4.11
+--includedir=/home/chris/development/rtems/4.11/include
+--libdir=/home/chris/development/rtems/4.11/lib
+--libexecdir=/home/chris/development/rtems/4.11/libexec
+--mandir=/home/chris/development/rtems/4.11/share/man
+--infodir=/home/chris/development/rtems/4.11/share/info
+--datadir=/home/chris/development/rtems/4.11/share
+--build=x86_64-freebsd9.1 --host=x86_64-freebsd9.1 --target=sparc-rtems4.11
+--disable-libstdcxx-pch --with-gnu-as --with-gnu-ld --verbose --with-newlib
+--with-system-zlib --disable-nls --without-included-gettext
+--disable-win32-registry --enable-version-specific-runtime-libs --disable-lto
+--enable-threads --enable-plugin --enable-newlib-io-c99-formats
+--enable-newlib-iconv --enable-languages=c,c++
+Thread model: rtems             <3>
+gcc version 4.7.2 20120920      <4>
+ (RTEMS 4.11 RSB cb12e4875c203f794a5cd4b3de36101ff9a88403)-1 newlib 2.0.0) (GCC)
+
+
+
+$ cd /somewhere
+$ tar --strip-components=3 -xjf $HOME/Downloads/rtems-4.11-sparc-rtems4.11-1.tar.bz2
+
+$ ../source-builder/sb-set-builder --log=l-sparc.txt \
+         --prefix=$HOME/development/rtems/4.11 \
+         --bset-tar-file \
+         4.11/rtems-sparc
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+1º Clone the tools
+
+git clone git://git.rtems.org/rtems-source-builder.git
+2º Check environment
+
+${PATH-rtems-source-builder}/source-builder/sb-check
+You must got:
+
+RTEMS Source Builder - Check, 4.11 (6b0d76cc9b43 modified)
+Environment is ok
+If not, you need more dependencies.
+
+3º Check the target arch you want:
+
+cd ${PATH-rtems-source-builder}/rtems
+../source-builder/sb-set-builder --list-bsets
+${PATH-rtems-source-builder}/source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/development/rtems/4.11  4.11/rtems-sparc
+You need to stay in ${PATH-rtems-source-builder}/rtems path, or the list won't be complete!
+
+4º Configure
+
+EXECUTABLE=$HOME/Repositories/git/rtems
+TARGET=sparc-rtems4.11
+PREFIX=${HOME}/opt/rtems
+${EXECUTABLE}/configure --target=${TARGET} --enable-rtemsbsp=sis --enable-tests=samples --prefix=${PREFIX} 
+5º Execute boostrap
+
+$HOME/Repositories/git/rtems/bootstrap
+6º Go to your build path and compile & install
+
+make
+make install
+Remember, you need the valid toolchain path in your environment variables.
+
+In example:
+
+export PATH=$HOME/development/rtems/4.11/bin:$PATH
+If you don't want to do it everytime you restart, add that in your ~/.bashrc file. And use commando source to update the current terminal environment.
+
+source ~/.bashrc
+
+
+
+
+////////////////////////////// To install ION-DTN on Raspberry pi ////////////////
+
+I had a few problems with earlier versions of ION, but have never seen the specific errors you mention. Are these errors which prevent the make command from completing successfully, or simply warnings? Which operating system are you using?
+Do the errors indicate which file or command caused the error message?
+
+If I recall correctly "undefined reference to ..." messages refer to a linking problem, e.g. the compiler needed to find something defined in a file it was not able to find. This could possibly be a symptom of the "linking problem" Scott mentioned in a previous posting related to 3.4.0.
+
+I suggest you attempt to install the latest release (3.4.1) using the following commands (Replace the paths as required):
+
+Download and Extract
+mkdir /home/alarm/downloads/ion-3.4.1
+cd /home/alarm/downloads/ion-3.4.1
+wget http://downloads.sourceforge.net/project/ion-dtn/ion-3.4.1.tar.gz
+tar -zxvf ion-3.4.1.tar.gz
+
+Install
+cd /home/alarm/downloads/ion-3.4.1/ion-open-source
+./configure
+make -j 5
+sudo make install
+sudo ldconfig
+
+Note, you do not have to run the make command with sudo BTW, you only need sudo to run "make install". I have had successful installations both installing and running everything as root and also installing and running using a regular user. You may want to try the former as a troubleshooting exercise if you are not successful with the instructions above.
