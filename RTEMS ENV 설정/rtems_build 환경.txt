@@ -1,5 +1,11 @@
 RTEMS & ION-DTN Installation Script
 
+
+참고 사항 
+prifix 경로내에 sparc-rtems4.11/leon3 내 taget.cfg / Makefile.inc 내부에 전역 변수들이 정의 되어 있음. 
+Ex> RTEMS_ROOT = $(prefix)
+
+
 1. 사전 준비 사항
 
 1. WSL SSH 설정
@@ -28,8 +34,9 @@ ION-DTN install path  : ~/MyWorks/ION-DTN
 
 ==============================================================
 
+1. 
 $ mkdir  –p  ~/MyWorks/rtems
-$ cd MyWorks/rtems
+$ cd ~/MyWorks/rtems
 $ sudo apt-get update
 $ sudo apt-get upgrade
 $ sudo apt-get install build-essential
@@ -39,6 +46,8 @@ $ sudo su -c "grep '^deb ' /etc/apt/sources.list | sed 's/^deb/deb-src/g' > /etc
 $ sudo apt update  -y
 $ sudo apt-get build-dep  binutils  gcc  g++  gdb  unzip  git  python2.7-dev
 
+2. TO RSB(RTEMS Source Builder) Build
+
 $ cd /MyWorks/rtems
 $ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.3/rtems-source-builder-4.11.3.tar.xz
 $ tar Jxf rtems-source-builder-4.11.3.tar.xz
@@ -46,7 +55,7 @@ $ mv rtems-source-builder-4.11.3 rsb
 $ cd rsb
 $ source-builder/sb-check // 환경 설정이 정상적으로 되었는지 확인 한다. 정상일 경우 Enviroment is ok 표시됨. 
 $ cd rtems
-$ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/rtems4.11 4.11/rtems-sparc  //(SR.CHOI - 권한 문제가 발생하면 sudo 로 실행 한다. )
+$ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/4.11 4.11/rtems-sparc
   
 빌드가 끝나면 prefix로 지정된 폴더에서 RSB를 확인 할 수 있음 RBS의 bin폴더를 PATH에 추가
 
@@ -54,8 +63,8 @@ $ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtem
 다음 내용을 .bashrc 마지막에 추가
 $ nano ~/.bashrc
 마지막 줄에 하기 내용 삽입
-export  PATH=$HOME/MyWorks/rtems/rtems4.11/bin:$PATH
-export  RTEMS_MAKEFILE_PATH=$HOME/MyWorks/rtems/rtems4.11/sparc-rtems4.11/leon3
+export  PATH=$HOME/MyWorks/rtems/4.11/bin:$PATH
+export  RTEMS_MAKEFILE_PATH=$HOME/MyWorks/rtems/4.11/sparc-rtems4.11/leon3
 
 다음 명령을 실행하여 RSB의 sparc-rtems4.11-gcc가 제대로 동작하는지 확인
 $ source ~/.bashrc
@@ -79,13 +88,11 @@ $ cd  $HOME/MyWorks/rtems
 $ mkdir build
 $ cd build/
 $ ../rtems-src/configure --target=sparc-rtems4.11 --enable-rtemsbsp=leon3 --enable-tests=samples --prefix=$HOME/MyWorks/rtems/rtems4.11
-(Another case>> $HOME/MyWorks/rtems/rtems-src/configure --prefix=$HOME/MyWorks/rtems/rtems4.11 --target=sparc-rtems4.11 --enable-rtemsbsp=leon3 --enable-posix --disable-networking)
-<<- 여기까지 진행 함. 
+(Another case>> $HOME/MyWorks/rtems/rtems-src/configure --prefix=$HOME/MyWorks/rtems/rtems4.11 --target=sparc-rtems4.11 --enable-rtemsbsp=leon3 --enable-posix)
 
 $ make && make install
 
 마지막 configure 할 때 prefix는 RSB를 빌드할 때와 똑같이 설정해야 함, 다음 코드를 ~./bashrc에 추가
-$cd 
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
