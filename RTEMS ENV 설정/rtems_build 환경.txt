@@ -88,6 +88,7 @@ $ make && make install
 $cd 
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ION Build
 
 1. ION 설치된 경로에서 arch-rtems 이동
@@ -106,15 +107,6 @@ rtems 4.11.3버전에서 rtems_bsdnet_loopattach를 지원하지 않아서
 생기는 문제라고 판단됨
 <Work Around>
 ionrtems.c에서 해당 내용을 주석처리
-
-
-
-
-
-
-
-
-
 
 
 
@@ -152,11 +144,46 @@ The next step is to check if your host is set up correctly.
 
 $ source-builder/sb-check
 
+Output:
+warning: exe: absolute exe found in path: (__objcopy) /usr/local/bin/objcopy
+warning: exe: absolute exe found in path: (__objdump) /usr/local/bin/objdump
+error: exe: not found: (_xz) /usr/local/bin/xz
+RTEMS Source Builder environment is not correctly set up
+$ source-builder/sb-check
+RTEMS Source Builder environment is ok
+
 $ cd rtems
 
 $ ../source-builder/sb-set-builder --list-bsets
 
 $ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/development/rtems/4.11 4.11/rtems-sparc
+
+Output : 
+Source Builder - Set Builder, v0.2.0
+Build Set: 4.11/rtems-sparc
+config: expat-2.1.0-1.cfg  
+package: expat-2.1.0-x86_64-freebsd9.1-1
+building: expat-2.1.0-x86_64-freebsd9.1-1
+config: tools/rtems-binutils-2.22-1.cfg
+package: sparc-rtems4.11-binutils-2.22-1
+building: sparc-rtems4.11-binutils-2.22-1
+config: tools/rtems-gcc-4.7.2-newlib-1.20.0-1.cfg
+package: sparc-rtems4.11-gcc-4.7.2-newlib-1.20.0-1
+building: sparc-rtems4.11-gcc-4.7.2-newlib-1.20.0-1
+config: tools/rtems-gdb-7.5.1-1.cfg 
+package: sparc-rtems4.11-gdb-7.5.1-1
+building: sparc-rtems4.11-gdb-7.5.1-1
+installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/development/rtems/4.11
+installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/development/rtems/4.11
+installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/development/rtems/4.11
+installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/development/rtems/4.11
+cleaning: expat-2.1.0-x86_64-freebsd9.1-1
+cleaning: sparc-rtems4.11-binutils-2.22-1
+cleaning: sparc-rtems4.11-gcc-4.7.2-newlib-1.20.0-1
+cleaning: sparc-rtems4.11-gdb-7.5.1-1
+Build Set: Time 0:13:43.616383
+
+
 
 $ ls $HOME/development/rtems/4.11
 bin         include     lib         libexec     share       sparc-rtems4.11
@@ -274,16 +301,16 @@ If I recall correctly "undefined reference to ..." messages refer to a linking p
 I suggest you attempt to install the latest release (3.4.1) using the following commands (Replace the paths as required):
 
 Download and Extract
-mkdir /home/alarm/downloads/ion-3.4.1
-cd /home/alarm/downloads/ion-3.4.1
-wget http://downloads.sourceforge.net/project/ion-dtn/ion-3.4.1.tar.gz
-tar -zxvf ion-3.4.1.tar.gz
+$mkdir /home/alarm/downloads/ion-3.4.1
+$cd /home/alarm/downloads/ion-3.4.1
+$wget http://downloads.sourceforge.net/project/ion-dtn/ion-3.4.1.tar.gz
+$tar -zxvf ion-3.4.1.tar.gz
 
 Install
-cd /home/alarm/downloads/ion-3.4.1/ion-open-source
-./configure
-make -j 5
-sudo make install
-sudo ldconfig
+$cd /home/alarm/downloads/ion-3.4.1/ion-open-source
+$./configure
+$make -j 5
+$sudo make install
+$sudo ldconfig
 
 Note, you do not have to run the make command with sudo BTW, you only need sudo to run "make install". I have had successful installations both installing and running everything as root and also installing and running using a regular user. You may want to try the former as a troubleshooting exercise if you are not successful with the instructions above.
