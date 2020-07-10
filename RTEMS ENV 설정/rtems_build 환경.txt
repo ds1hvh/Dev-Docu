@@ -133,14 +133,14 @@ $ sudo apt-get build-dep binutils gcc g++ gdb unzip git
 $ sudo apt-get install python2.7-dev
 ========================================================
 Do not forget to set the path before you use the tools, for example to build the RTEMS kernel.
-$ export PATH=$HOME/development/rtems/4.11/bin:$PATH
+$ export PATH=$HOME/MyWorks/rtems/4.11/bin:$PATH
 
 Make sure you place the RTEMS tool path at the front of your path so they are searched first. 
 
-Setup a development work space:
+Setup a MyWorks work space:
 $ cd
-$ mkdir -p development/rtems/src
-$ cd development/rtems/src
+$ mkdir -p MyWorks/rtems/src
+$ cd MyWorks/rtems/src
 
 The RTEMS Source Builder is distributed as source. 
 
@@ -163,7 +163,7 @@ $ cd rtems
 
 $ ../source-builder/sb-set-builder --list-bsets
 
-$ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/development/rtems/4.11 4.11/rtems-sparc
+$ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/4.11 4.11/rtems-sparc
 
 Output : 
 Source Builder - Set Builder, v0.2.0
@@ -180,10 +180,10 @@ building: sparc-rtems4.11-gcc-4.7.2-newlib-1.20.0-1
 config: tools/rtems-gdb-7.5.1-1.cfg 
 package: sparc-rtems4.11-gdb-7.5.1-1
 building: sparc-rtems4.11-gdb-7.5.1-1
-installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/development/rtems/4.11
-installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/development/rtems/4.11
-installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/development/rtems/4.11
-installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/development/rtems/4.11
+installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/MyWorks/rtems/4.11
+installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/MyWorks/rtems/4.11
+installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/MyWorks/rtems/4.11
+installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/MyWorks/rtems/4.11
 cleaning: expat-2.1.0-x86_64-freebsd9.1-1
 cleaning: sparc-rtems4.11-binutils-2.22-1
 cleaning: sparc-rtems4.11-gcc-4.7.2-newlib-1.20.0-1
@@ -192,9 +192,9 @@ Build Set: Time 0:13:43.616383
 
 
 
-$ ls $HOME/development/rtems/4.11
+$ ls $HOME/MyWorks/rtems/4.11
 bin         include     lib         libexec     share       sparc-rtems4.11
-$ ls $HOME/development/rtems/4.11/bin
+$ ls $HOME/MyWorks/rtems/4.11/bin
 sparc-rtems4.11-addr2line       sparc-rtems4.11-cpp
 sparc-rtems4.11-gcc-ar          sparc-rtems4.11-gprof
 sparc-rtems4.11-objdump         sparc-rtems4.11-size
@@ -211,23 +211,23 @@ sparc-rtems4.11-c++filt         sparc-rtems4.11-gcc-4.7.2
 sparc-rtems4.11-gdb             sparc-rtems4.11-objcopy
 sparc-rtems4.11-sis
 
-$ $HOME/development/rtems/4.11/bin/sparc-rtems4.11-gcc -v
+$ $HOME/MyWorks/rtems/4.11/bin/sparc-rtems4.11-gcc -v
 
 Using built-in specs.
-COLLECT_GCC=/home/chris/development/rtems/4.11/bin/sparc-rtems4.11-gcc
-COLLECT_LTO_WRAPPER=/usr/home/chris/development/rtems/4.11/bin/../ \
+COLLECT_GCC=/home/chris/MyWorks/rtems/4.11/bin/sparc-rtems4.11-gcc
+COLLECT_LTO_WRAPPER=/usr/home/chris/MyWorks/rtems/4.11/bin/../ \
 libexec/gcc/sparc-rtems4.11/4.7.2/lto-wrapper
 Target: sparc-rtems4.11                         
 Configured with: ../gcc-4.7.2/configure         
---prefix=/home/chris/development/rtems/4.11
---bindir=/home/chris/development/rtems/4.11/bin
---exec_prefix=/home/chris/development/rtems/4.11
---includedir=/home/chris/development/rtems/4.11/include
---libdir=/home/chris/development/rtems/4.11/lib
---libexecdir=/home/chris/development/rtems/4.11/libexec
---mandir=/home/chris/development/rtems/4.11/share/man
---infodir=/home/chris/development/rtems/4.11/share/info
---datadir=/home/chris/development/rtems/4.11/share
+--prefix=/home/chris/MyWorks/rtems/4.11
+--bindir=/home/chris/MyWorks/rtems/4.11/bin
+--exec_prefix=/home/chris/MyWorks/rtems/4.11
+--includedir=/home/chris/MyWorks/rtems/4.11/include
+--libdir=/home/chris/MyWorks/rtems/4.11/lib
+--libexecdir=/home/chris/MyWorks/rtems/4.11/libexec
+--mandir=/home/chris/MyWorks/rtems/4.11/share/man
+--infodir=/home/chris/MyWorks/rtems/4.11/share/info
+--datadir=/home/chris/MyWorks/rtems/4.11/share
 --build=x86_64-freebsd9.1 --host=x86_64-freebsd9.1 --target=sparc-rtems4.11
 --disable-libstdcxx-pch --with-gnu-as --with-gnu-ld --verbose --with-newlib
 --with-system-zlib --disable-nls --without-included-gettext
@@ -244,7 +244,7 @@ $ cd /somewhere
 $ tar --strip-components=3 -xjf $HOME/Downloads/rtems-4.11-sparc-rtems4.11-1.tar.bz2
 
 $ ../source-builder/sb-set-builder --log=l-sparc.txt \
-         --prefix=$HOME/development/rtems/4.11 \
+         --prefix=$HOME/MyWorks/rtems/4.11 \
          --bset-tar-file \
          4.11/rtems-sparc
 
@@ -270,7 +270,7 @@ If not, you need more dependencies.
 
 cd ${PATH-rtems-source-builder}/rtems
 ../source-builder/sb-set-builder --list-bsets
-${PATH-rtems-source-builder}/source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/development/rtems/4.11  4.11/rtems-sparc
+${PATH-rtems-source-builder}/source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/4.11  4.11/rtems-sparc
 You need to stay in ${PATH-rtems-source-builder}/rtems path, or the list won't be complete!
 
 4º Configure
@@ -290,7 +290,7 @@ Remember, you need the valid toolchain path in your environment variables.
 
 In example:
 
-export PATH=$HOME/development/rtems/4.11/bin:$PATH
+export PATH=$HOME/MyWorks/rtems/4.11/bin:$PATH
 If you don't want to do it everytime you restart, add that in your ~/.bashrc file. And use commando source to update the current terminal environment.
 
 source ~/.bashrc
