@@ -321,3 +321,27 @@ $sudo make install
 $sudo ldconfig
 
 Note, you do not have to run the make command with sudo BTW, you only need sudo to run "make install". I have had successful installations both installing and running everything as root and also installing and running using a regular user. You may want to try the former as a troubleshooting exercise if you are not successful with the instructions above.
+
+
+bug report 
+=====================================================================================================================
+e2udp-file2udp.Tpo -c -o dgr/test/file2udp-file2udp.o test -f 'dgr/test/file2ud p.c' || echo './'dgr/test/file2udp.c
+dgr/test/file2udp.c: In function ‘rsend’:
+dgr/test/file2udp.c:327:2: error: ‘memcpy’ forming offset [9, 40] is out of the
+bounds [0, 8] of object ‘seqCounter’ with type ‘long int’ [-Werror=array-bounds]
+memcpy(buffer, (char *) &seqCounter, 40);
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dgr/test/file2udp.c:322:14: note: ‘seqCounter’ declared here
+static long seqCounter;
+^~~~~~~~~~
+cc1: all warnings being treated as errors
+
+And the solution seemed to be changing the line to
+
+memcpy(buffer, (char *) &seqCounter, sizeof(seqCounter));
+
+Because the seqCounter is a long and only 4 bytes in length, not 40.
+
+
+
+
