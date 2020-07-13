@@ -53,13 +53,13 @@ $ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.3/rtems-source-builder
 $ tar Jxf rtems-source-builder-4.11.3.tar.xz
 $ mv rtems-source-builder-4.11.3 rsb
 $ cd rsb
-$ source-builder/sb-check // 환경 설정이 정상적으로 되었는지 확인 한다. 정상일 경우 Enviroment is ok 표시됨. 
+
+$ source-builder/sb-check 
+// 환경 설정이 정상적으로 되었는지 확인 한다. 정상일 경우 Enviroment is ok 표시됨. 
+
 $ cd rtems
 $ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/4.11 4.11/rtems-sparc
   
-빌드가 끝나면 prefix로 지정된 폴더에서 RSB를 확인 할 수 있음 RBS의 bin폴더를 PATH에 추가
-
-
 다음 내용을 .bashrc 마지막에 추가
 $ nano ~/.bashrc
 마지막 줄에 하기 내용 삽입
@@ -70,29 +70,38 @@ export  RTEMS_MAKEFILE_PATH=$HOME/MyWorks/rtems/4.11/sparc-rtems4.11/leon3
 $ source ~/.bashrc
 $ sparc-rtems4.11-gcc –v
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-RTEMS 소스 다운로드
+3. RTEMS 소스 다운로드
 
 $ cd  $HOME/MyWorks/rtems
 $ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.3/rtems-4.11.3.tar.xz
 $ tar -xvf rtems-4.11.3.tar.xz
 $ mv rtems-4.11.3 rtems-src
 $ cd  rtems-src/
+$ ./bootstrap -c
+$ ./bootstrap -p 
 $ ./bootstrap
-(./bootstrap -c && ./bootstrap -p && $HOME/MyWorks/rtems/rsb/source-builder/sb-boostrap)
-cd 
+$ $HOME/MyWorks/rtems/rtems-src/source-builder/sb-boostrap
+
+
 
 특정 bsp로 RTEMS를 빌드
 $ cd  $HOME/MyWorks/rtems
 $ mkdir build
 $ cd build/
-$ ../rtems-src/configure --target=sparc-rtems4.11 --enable-rtemsbsp=leon3 --enable-tests=samples --prefix=$HOME/MyWorks/rtems/rtems4.11
-(Another case>> $HOME/MyWorks/rtems/rtems-src/configure --prefix=$HOME/MyWorks/rtems/rtems4.11 --target=sparc-rtems4.11 --enable-rtemsbsp=leon3 --enable-posix)
+$ ../rtems-src/configure --target=sparc-rtems4.11 \
+                         --enable-rtemsbsp=leon3  \
+                         --enable-tests=samples   \
+                         --prefix=$HOME/MyWorks/rtems/4.11
 
 $ make && make install
 
-마지막 configure 할 때 prefix는 RSB를 빌드할 때와 똑같이 설정해야 함, 다음 코드를 ~./bashrc에 추가
+실행 후 sparc-rtem4.11 네부에 있는 파일을  Cross Compiler가 설치된 폴더에 복사 한다. 
+
+$ cp -r sparc-rtems $HOME/MyWorks/rtems/4.11
+
+
+마지막 configure 할 때 prefix는 RSB를 빌드할 때와 똑같이 설정해야 함, 
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +115,7 @@ $ cd arch-rtems
 $ ./srclinks
 
 3. Make를 실행하여 o-optimize 폴더에 ion.exe 생성되는것을 확인
-$ make
+$ make -j 4
 
 cf>
 rtems_bsdnet_loopattach를 찾을 수 없다고 나오는데, 
@@ -116,11 +125,20 @@ rtems 4.11.3버전에서 rtems_bsdnet_loopattach를 지원하지 않아서
 ionrtems.c에서 해당 내용을 주석처리
 
 
+$ cd ion-3.6.1
+$ ./configure
+$ make
+$ sudo make install
+$ sudo ldconfig
 
-//////////////////
-$ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.0/rtems-source-builder-4.11.0.tar.xz
+$ killm
+$ ionstart -I hostxxx.rc  // xxx is ip aaa.bbb.ccc.xxx
+$ bosink ipn:xxx.1
 
+> 
+$ echo "Hello World" | bpsource ipn:xxx.1
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 RSB Build 
 What is the RSB( RTEMS Source Builder)
 The RTEMS Source Builder or RSB is a tool to build packages from source.
@@ -305,16 +323,16 @@ Do the errors indicate which file or command caused the error message?
 
 If I recall correctly "undefined reference to ..." messages refer to a linking problem, e.g. the compiler needed to find something defined in a file it was not able to find. This could possibly be a symptom of the "linking problem" Scott mentioned in a previous posting related to 3.4.0.
 
-I suggest you attempt to install the latest release (3.4.1) using the following commands (Replace the paths as required):
+I suggest you attempt to install the latest release (3.6.1) using the following commands (Replace the paths as required):
 
 Download and Extract
-$mkdir /home/alarm/downloads/ion-3.4.1
-$cd /home/alarm/downloads/ion-3.4.1
-$wget http://downloads.sourceforge.net/project/ion-dtn/ion-3.4.1.tar.gz
-$tar -zxvf ion-3.4.1.tar.gz
+$mkdir /home/alarm/downloads/ion-3.6.1
+$cd /home/alarm/downloads/ion-3.6.1
+$wget http://downloads.sourceforge.net/project/ion-dtn/ion-3.6.1.tar.gz
+$tar -zxvf ion-3.6.1.tar.gz
 
 Install
-$cd /home/alarm/downloads/ion-3.4.1/ion-open-source
+$cd /home/alarm/downloads/ion-3.6.1/ion-open-source
 $./configure
 $make -j 5
 $sudo make install
@@ -349,3 +367,56 @@ Because the seqCounter is a long and only 4 bytes in length, not 40.
 https://samsclass.info/129S/proj/ion-dtn.htm
 
 Ubuntu 18.04 64bit Version
+
+
+Installing Multiple GCC Versions
+
+This section provides instructions about how to install and use multiple versions of GCC on Ubuntu 18.04. The newer versions of the GCC compiler include support for new languages, better performance and extended features.
+
+At the time of writing this article, the default Ubuntu repositories include several GCC versions, from 5.x.x to 8.x.x. The latest version of GCC, which is 9.1.0 is available from the Ubuntu Toolchain PPA.
+
+In the following example, we will install the latest three versions of GCC and G++.
+
+First, add the ubuntu-toolchain-r/test PPA to your system with:
+
+
+
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+
+
+Install the desired GCC and G++ versions by typing:
+
+
+sudo apt install gcc-7 g++-7 gcc-8 g++-8 gcc-9 g++-9
+
+The commands below will configure alternative for each version and associate a priority with it. The default version is the one with the highest priority, in our case that is gcc-9.
+
+
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 --slave /usr/bin/g++ g++ /usr/bin/g++-8 --slave /usr/bin/gcov gcov /usr/bin/gcov-8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 --slave /usr/bin/g++ g++ /usr/bin/g++-7 --slave /usr/bin/gcov gcov /usr/bin/gcov-7
+
+
+Later if you want to change the default version use the update-alternatives command:
+
+sudo update-alternatives --config gcc
+
+There are 3 choices for the alternative gcc (providing /usr/bin/gcc).
+
+  Selection    Path            Priority   Status
+------------------------------------------------------------
+* 0            /usr/bin/gcc-9   90        auto mode
+  1            /usr/bin/gcc-7   70        manual mode
+  2            /usr/bin/gcc-8   80        manual mode
+  3            /usr/bin/gcc-9   90        manual mode
+
+Press <enter> to keep the current choice[*], or type selection number:
+
+
+You will be presented with a list of all installed GCC versions on your Ubuntu system. Enter the number of the version you want to be used as a default and press Enter.
+
+The command will create symbolic links to the specific versions of GCC and G++.
+
+
+
