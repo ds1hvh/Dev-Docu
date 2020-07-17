@@ -1,5 +1,8 @@
 RTEMS & ION-DTN Installation Script
 
+Reference Site 
+http://sichenzhao.blogspot.com/2017/05/
+
 
 참고 사항 
 prifix 경로내에 sparc-rtems4.11/leon3 내 taget.cfg / Makefile.inc 내부에 전역 변수들이 정의 되어 있음. 
