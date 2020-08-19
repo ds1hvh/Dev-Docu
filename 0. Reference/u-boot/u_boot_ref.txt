@@ -1,0 +1,97 @@
+Hello Wolfgang,
+
+This patch adds support for SPARC/LEON3 to U-Boot. LEON3 boards 
+are added in separate patches.
+
+This patch does not support LEON3 SMP system.
+
+Linux for SPARC assumes that there is a Sun Boot prom
+available. The boot prom is used as monitor to support basic
+features such as rebooting, printing to the system console
+(serial terminal in the LEON case) and getting information
+about the hardware (baudrate, main memory etc.). So, in
+order to boot SPARC Linux on LEON a standard boot prom is
+emulated. This is done in cpu/leon?/prom.c.
+The boot prom must be placed at a higher address that the
+stack to avoid that it gets overwritten.
+
+Some chip designs has UHCI and EHI USB. UHCI has been
+implemented for U-Boot on LEON3 systems.
+
+LEON3 processors is on an extended AMBA bus (with Plug&Play
+support), whereas LEON2 uses hardcoded addresses since it
+is on an AMBA bus without Plug&Play.
+
+ABOUT LEON3 and GRLIB
+---------------------
+LEON3 is an open source (GPL) SPARC V7 and/or V8 processor part of GRLIB.
+GRLIB is a free comprehensive open source (GPL) Portable IP library 
+(written in VHDL) featuring cores such as Ethernet 10/100/1000, SpaceWire, 
+PCI, CAN, 1553, I2C, USB 1.1 and 2.0, SPI, DMA ATA, SVGA, PS/2, UART, 
+Timer, SDRAM, SRAM, SSRAM, DDR, DDR2, FLASH/PROM, CPU Debug Unit, FPU, 
+GPIO and many more. More info available at www.gaisler.com.
+
+ABOUT SPARC-ELF COMPILER
+------------------------
+Compiling u-boot for LEON3 and LEON2 has only been has only been tested 
+with GCC
+3.4.4 compiler with added LEON2 and LEON3 support available from 
+www.gaisler.com or
+ftp://ftp.gaisler.com/gaisler.com/bcc/bin/linux/sparc-elf-3.4.4-1.0.30.tar.bz2, 
+
+installation instructions can be found in bcc/doc/bcc.pdf. (extract to 
+/opt/ and
+add /opt/sparc-elf-3.4.4/bin to PATH).
+
+
+U-BOOT support tested
+---------------------
+- LEON3 (and LEON3FT Fault tolerant version)
+- LEON3 Simmulator (GRSIM and TSIM)
+- Network (GRETH and SMC91111)
+- USB 1.1 (UHCI)
+- Linux and RTEMS booting
+- booting UBOOT from RAM and FLASH by changing board/gaisler/xxx/config.mk
+- DDR, DDR2, SRAM, FT-SRAM
+- UART, IRQ, Timer
+
+This patch is available at ftp://ftp.gaisler.com/gaisler.com/u-boot/patches/4_leon3.patch.
+
+Best Regards,
+Daniel Hellstrom
+
+==========================================================
+Building U-Boot
+Note: this stub is to help with the LEON3 Qemu tutorial. The following instructions built the image and were run on a Debian Sqeeze host.= Building U-Boot (mkimage) from Source =
+
+Download the latest release of the ​universal boot loader from ​the ftp or, you can check out the developer branch using git.
+
+$ git clone ​git://git.denx.de/u-boot.git $ cd u-boot
+
+Some hardware vendors provide their own patches for building u-boot, which are sometimes necessary to apply to build the mkimage...
+
+Locate the board to build. For example, if you wanted to build u-boot for the leon3...
+
+u-boot$ grep -R "leon3"
+
+Set the toolchain
+
+$ export CROSS_COMPILE=/opt/rtems-4.11/bin/sparc-rtems4.11-
+
+TODO: looks like the CONFIG_SYS_TEXT_BASE might also have to be set... Where the prefix is the location of the RTEMS toolchain for your machine.
+
+Build the package with the following commands:
+
+u-boot$ make grsim_config u-boot$ make
+
+Making a U-boot Image ¶
+TODO: want image to provide functionality similar to the grub script below... # have the following commands: ls pc multiboot gpt fat boot reboot configfile cat help # have access to at least ??? kB of memory # use qemu's vfat for access # read rtems-boot.cfg for the boot menu (if easy to do) # make sure networking has been addressed in u-boot image script
+
+Below was a cut-and-paste from the grub tutorial, need to modify for u-boot. To make the floppy image follow the instructions in the Building Grub. This script is adapted from the instructions:
+
+#! /bin/sh -x grub=/tmp/g2/build workspace=/tmp/g2 mnt=$workspace/mnt/loop file=$workspace/rtems-boot.img export PATH=$grub/bin:$grub/sbin:$PATH mkdir -p $workspace cd $workspace grub-mkimage -o core.img _chain ls pc multiboot gpt fat boot reboot configfile cat help dd if=/dev/zero of=$file bs=512 count=2880 /sbin/mkdosfs $file mkdir -p $mnt mount -o loop -t vfat $file $mnt mkdir -p $mnt/boot/grub cp $grub/lib/grub/i386-pc/boot.img core.img $grub/lib/grub/i386-pc/*.mod $mnt/boot/grub echo "configfile (hd0,0)/rtems-grub.cfg" > $mnt/boot/grub/grub.cfg echo '(fd0)' $file > tmp_device.map grub-setup -d $mnt/boot/grub -r '(fd0)' -m tmp_device.map '(fd0)' rm -f tmp_device.map umount $mnt
+
+References
+# ​ftp://ftp.gaisler.com/gaisler.com/u-boot/README # ​http://www.linuxforu.com/2011/08/qemu-for-embedded-systems-development-part-3/
+
+

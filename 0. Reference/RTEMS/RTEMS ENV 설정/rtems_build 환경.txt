@@ -1,0 +1,425 @@
+RTEMS & ION-DTN Installation Script
+
+Reference Site 
+http://sichenzhao.blogspot.com/2017/05/
+
+
+참고 사항 
+prifix 경로내에 sparc-rtems4.11/leon3 내 taget.cfg / Makefile.inc 내부에 전역 변수들이 정의 되어 있음. 
+Ex> RTEMS_ROOT = $(prefix)
+
+
+1. 사전 준비 사항
+
+1. WSL SSH 설정
+openssh-server 재거 후 재 설치
+$ sudo apt purge openssh-server
+$ sudo apt install openssh-server
+
+$ nano /etc/ssh/sshd_config 에서 하기의 값을 수정 한다.
+
+Port 22
+PasswordAuthentication yes
+
+저장 후 service를 재 시작 한다. 
+
+$ sudo service ssh --full-restart
+
+==============================================================
+2. 개발 경로 설정 
+wsl 로 개발 할 경우 windows내 개발 폴더를 wsl 내부에 심볼링크해 주면 편함. 
+
+ln -s "/mnt/d/MyWorks" /home/<my-wsl-username>/MyWorks
+
+
+rtems install path    : ~/MyWorks/rtems
+ION-DTN install path  : ~/MyWorks/ION-DTN
+
+==============================================================
+
+1. 
+$ mkdir  –p  ~/MyWorks/rtems
+$ cd ~/MyWorks/rtems
+$ sudo apt-get update
+$ sudo apt-get upgrade
+$ sudo apt-get install build-essential
+$ sudo apt-get install git
+$ sudo apt-get install python-dev
+$ sudo su -c "grep '^deb ' /etc/apt/sources.list | sed 's/^deb/deb-src/g' > /etc/apt/sources.list.d/deb-src.list"
+$ sudo apt update  -y
+$ sudo apt-get build-dep  binutils  gcc  g++  gdb  unzip  git  python2.7-dev
+
+2. TO RSB(RTEMS Source Builder) Build
+
+$ cd /MyWorks/rtems
+$ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.3/rtems-source-builder-4.11.3.tar.xz
+$ tar Jxf rtems-source-builder-4.11.3.tar.xz
+$ mv rtems-source-builder-4.11.3 rsb
+$ cd rsb
+
+$ source-builder/sb-check 
+// 환경 설정이 정상적으로 되었는지 확인 한다. 정상일 경우 Enviroment is ok 표시됨. 
+
+$ cd rtems
+$ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/4.11 4.11/rtems-sparc
+  
+다음 내용을 .bashrc 마지막에 추가
+$ nano ~/.bashrc
+마지막 줄에 하기 내용 삽입
+export  PATH=$HOME/MyWorks/rtems/4.11/bin:$PATH
+export  RTEMS_MAKEFILE_PATH=$HOME/MyWorks/rtems/4.11/sparc-rtems4.11/leon3
+
+다음 명령을 실행하여 RSB의 sparc-rtems4.11-gcc가 제대로 동작하는지 확인
+$ source ~/.bashrc
+$ sparc-rtems4.11-gcc –v
+
+
+3. RTEMS 소스 다운로드
+
+$ cd  $HOME/MyWorks/rtems
+$ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.3/rtems-4.11.3.tar.xz
+$ tar -xvf rtems-4.11.3.tar.xz
+$ mv rtems-4.11.3 rtems-src
+$ cd  rtems-src/
+$ ./bootstrap -c
+$ ./bootstrap -p 
+$ ./bootstrap
+$ $HOME/MyWorks/rtems/rtems-src/source-builder/sb-boostrap
+
+
+
+특정 bsp로 RTEMS를 빌드
+$ cd  $HOME/MyWorks/rtems
+$ mkdir build
+$ cd build/
+$ ../rtems-src/configure --target=sparc-rtems4.11 \
+                         --enable-rtemsbsp=leon3  \
+                         --enable-tests=samples   \
+                         --prefix=$HOME/MyWorks/rtems/4.11
+
+$ make && make install
+
+실행 후 sparc-rtem4.11 네부에 있는 파일을  Cross Compiler가 설치된 폴더에 복사 한다. 
+
+$ cp -r sparc-rtems $HOME/MyWorks/rtems/4.11
+
+
+마지막 configure 할 때 prefix는 RSB를 빌드할 때와 똑같이 설정해야 함, 
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ION Build
+
+1. ION 설치된 경로에서 arch-rtems 이동
+$ cd arch-rtems
+
+2. srclinks를 이용하여 make에 필요한 파일을 arch-rtems 디렉토리로 링크 연결
+   (arch-rtems 디렉토리에 c파일들 추가되는 것 확인)
+$ ./srclinks
+
+3. Make를 실행하여 o-optimize 폴더에 ion.exe 생성되는것을 확인
+$ make -j 4
+
+cf>
+rtems_bsdnet_loopattach를 찾을 수 없다고 나오는데, 
+rtems 4.11.3버전에서 rtems_bsdnet_loopattach를 지원하지 않아서 
+생기는 문제라고 판단됨
+<Work Around>
+ionrtems.c에서 해당 내용을 주석처리
+
+
+$ cd ion-3.6.1
+$ ./configure
+$ make
+$ sudo make install
+$ sudo ldconfig
+
+$ killm
+$ ionstart -I hostxxx.rc  // xxx is ip aaa.bbb.ccc.xxx
+$ bosink ipn:xxx.1
+
+> 
+$ echo "Hello World" | bpsource ipn:xxx.1
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+RSB Build 
+What is the RSB( RTEMS Source Builder)
+The RTEMS Source Builder or RSB is a tool to build packages from source.
+It is used by the RTEMS project to build it’s compilers and OS
+The RSB helps consolidate the details you need to build a package from source in a controlled and verifiable way. 
+There is no need to become root or the administrator and we recommend you avoid doing this. 
+
+== Below are the list you need to install. =============
+$ sudo apt-get build-dep binutils gcc g++ gdb unzip git
+$ sudo apt-get install python2.7-dev
+========================================================
+Do not forget to set the path before you use the tools, for example to build the RTEMS kernel.
+$ export PATH=$HOME/MyWorks/rtems/4.11/bin:$PATH
+
+Make sure you place the RTEMS tool path at the front of your path so they are searched first. 
+
+Setup a MyWorks work space:
+$ cd
+$ mkdir -p MyWorks/rtems/src
+$ cd MyWorks/rtems/src
+
+The RTEMS Source Builder is distributed as source. 
+
+$ git clone git://git.rtems.org/rtems-source-builder.git
+$ cd rtems-source-builder
+
+The next step is to check if your host is set up correctly.
+
+$ source-builder/sb-check
+
+Output:
+warning: exe: absolute exe found in path: (__objcopy) /usr/local/bin/objcopy
+warning: exe: absolute exe found in path: (__objdump) /usr/local/bin/objdump
+error: exe: not found: (_xz) /usr/local/bin/xz
+RTEMS Source Builder environment is not correctly set up
+$ source-builder/sb-check
+RTEMS Source Builder environment is ok
+
+$ cd rtems
+
+$ ../source-builder/sb-set-builder --list-bsets
+
+$ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/4.11 4.11/rtems-sparc
+
+Output : 
+Source Builder - Set Builder, v0.2.0
+Build Set: 4.11/rtems-sparc
+config: expat-2.1.0-1.cfg  
+package: expat-2.1.0-x86_64-freebsd9.1-1
+building: expat-2.1.0-x86_64-freebsd9.1-1
+config: tools/rtems-binutils-2.22-1.cfg
+package: sparc-rtems4.11-binutils-2.22-1
+building: sparc-rtems4.11-binutils-2.22-1
+config: tools/rtems-gcc-4.7.2-newlib-1.20.0-1.cfg
+package: sparc-rtems4.11-gcc-4.7.2-newlib-1.20.0-1
+building: sparc-rtems4.11-gcc-4.7.2-newlib-1.20.0-1
+config: tools/rtems-gdb-7.5.1-1.cfg 
+package: sparc-rtems4.11-gdb-7.5.1-1
+building: sparc-rtems4.11-gdb-7.5.1-1
+installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/MyWorks/rtems/4.11
+installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/MyWorks/rtems/4.11
+installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/MyWorks/rtems/4.11
+installing: rtems-4.11-sparc-rtems4.11-1 -> /home/chris/MyWorks/rtems/4.11
+cleaning: expat-2.1.0-x86_64-freebsd9.1-1
+cleaning: sparc-rtems4.11-binutils-2.22-1
+cleaning: sparc-rtems4.11-gcc-4.7.2-newlib-1.20.0-1
+cleaning: sparc-rtems4.11-gdb-7.5.1-1
+Build Set: Time 0:13:43.616383
+
+
+
+$ ls $HOME/MyWorks/rtems/4.11
+bin         include     lib         libexec     share       sparc-rtems4.11
+$ ls $HOME/MyWorks/rtems/4.11/bin
+sparc-rtems4.11-addr2line       sparc-rtems4.11-cpp
+sparc-rtems4.11-gcc-ar          sparc-rtems4.11-gprof
+sparc-rtems4.11-objdump         sparc-rtems4.11-size
+sparc-rtems4.11-ar              sparc-rtems4.11-elfedit
+sparc-rtems4.11-gcc-nm          sparc-rtems4.11-ld
+sparc-rtems4.11-ranlib          sparc-rtems4.11-strings
+sparc-rtems4.11-as              sparc-rtems4.11-g++
+sparc-rtems4.11-gcc-ranlib      sparc-rtems4.11-ld.bfd
+sparc-rtems4.11-readelf         sparc-rtems4.11-strip
+sparc-rtems4.11-c++             sparc-rtems4.11-gcc
+sparc-rtems4.11-gcov            sparc-rtems4.11-nm
+sparc-rtems4.11-run             xmlwf
+sparc-rtems4.11-c++filt         sparc-rtems4.11-gcc-4.7.2
+sparc-rtems4.11-gdb             sparc-rtems4.11-objcopy
+sparc-rtems4.11-sis
+
+$ $HOME/MyWorks/rtems/4.11/bin/sparc-rtems4.11-gcc -v
+
+Using built-in specs.
+COLLECT_GCC=/home/chris/MyWorks/rtems/4.11/bin/sparc-rtems4.11-gcc
+COLLECT_LTO_WRAPPER=/usr/home/chris/MyWorks/rtems/4.11/bin/../ \
+libexec/gcc/sparc-rtems4.11/4.7.2/lto-wrapper
+Target: sparc-rtems4.11                         
+Configured with: ../gcc-4.7.2/configure         
+--prefix=/home/chris/MyWorks/rtems/4.11
+--bindir=/home/chris/MyWorks/rtems/4.11/bin
+--exec_prefix=/home/chris/MyWorks/rtems/4.11
+--includedir=/home/chris/MyWorks/rtems/4.11/include
+--libdir=/home/chris/MyWorks/rtems/4.11/lib
+--libexecdir=/home/chris/MyWorks/rtems/4.11/libexec
+--mandir=/home/chris/MyWorks/rtems/4.11/share/man
+--infodir=/home/chris/MyWorks/rtems/4.11/share/info
+--datadir=/home/chris/MyWorks/rtems/4.11/share
+--build=x86_64-freebsd9.1 --host=x86_64-freebsd9.1 --target=sparc-rtems4.11
+--disable-libstdcxx-pch --with-gnu-as --with-gnu-ld --verbose --with-newlib
+--with-system-zlib --disable-nls --without-included-gettext
+--disable-win32-registry --enable-version-specific-runtime-libs --disable-lto
+--enable-threads --enable-plugin --enable-newlib-io-c99-formats
+--enable-newlib-iconv --enable-languages=c,c++
+Thread model: rtems             <3>
+gcc version 4.7.2 20120920      <4>
+ (RTEMS 4.11 RSB cb12e4875c203f794a5cd4b3de36101ff9a88403)-1 newlib 2.0.0) (GCC)
+
+
+
+$ cd /somewhere
+$ tar --strip-components=3 -xjf $HOME/Downloads/rtems-4.11-sparc-rtems4.11-1.tar.bz2
+
+$ ../source-builder/sb-set-builder --log=l-sparc.txt \
+         --prefix=$HOME/MyWorks/rtems/4.11 \
+         --bset-tar-file \
+         4.11/rtems-sparc
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////////////
+
+1º Clone the tools
+
+git clone git://git.rtems.org/rtems-source-builder.git
+2º Check environment
+
+${PATH-rtems-source-builder}/source-builder/sb-check
+You must got:
+
+RTEMS Source Builder - Check, 4.11 (6b0d76cc9b43 modified)
+Environment is ok
+If not, you need more dependencies.
+
+3º Check the target arch you want:
+
+cd ${PATH-rtems-source-builder}/rtems
+../source-builder/sb-set-builder --list-bsets
+${PATH-rtems-source-builder}/source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/4.11  4.11/rtems-sparc
+You need to stay in ${PATH-rtems-source-builder}/rtems path, or the list won't be complete!
+
+4º Configure
+
+EXECUTABLE=$HOME/Repositories/git/rtems
+TARGET=sparc-rtems4.11
+PREFIX=${HOME}/opt/rtems
+${EXECUTABLE}/configure --target=${TARGET} --enable-rtemsbsp=sis --enable-tests=samples --prefix=${PREFIX} 
+5º Execute boostrap
+
+$HOME/Repositories/git/rtems/bootstrap
+6º Go to your build path and compile & install
+
+make
+make install
+Remember, you need the valid toolchain path in your environment variables.
+
+In example:
+
+export PATH=$HOME/MyWorks/rtems/4.11/bin:$PATH
+If you don't want to do it everytime you restart, add that in your ~/.bashrc file. And use commando source to update the current terminal environment.
+
+source ~/.bashrc
+
+
+
+
+////////////////////////////// To install ION-DTN on Raspberry pi ////////////////
+
+I had a few problems with earlier versions of ION, but have never seen the specific errors you mention. Are these errors which prevent the make command from completing successfully, or simply warnings? Which operating system are you using?
+Do the errors indicate which file or command caused the error message?
+
+If I recall correctly "undefined reference to ..." messages refer to a linking problem, e.g. the compiler needed to find something defined in a file it was not able to find. This could possibly be a symptom of the "linking problem" Scott mentioned in a previous posting related to 3.4.0.
+
+I suggest you attempt to install the latest release (3.6.1) using the following commands (Replace the paths as required):
+
+Download and Extract
+$mkdir /home/alarm/downloads/ion-3.6.1
+$cd /home/alarm/downloads/ion-3.6.1
+$wget http://downloads.sourceforge.net/project/ion-dtn/ion-3.6.1.tar.gz
+$tar -zxvf ion-3.6.1.tar.gz
+
+Install
+$cd /home/alarm/downloads/ion-3.6.1/ion-open-source
+$./configure
+$make -j 5
+$sudo make install
+$sudo ldconfig
+
+Note, you do not have to run the make command with sudo BTW, you only need sudo to run "make install". I have had successful installations both installing and running everything as root and also installing and running using a regular user. You may want to try the former as a troubleshooting exercise if you are not successful with the instructions above.
+
+
+bug report 
+=====================================================================================================================
+e2udp-file2udp.Tpo -c -o dgr/test/file2udp-file2udp.o test -f 'dgr/test/file2ud p.c' || echo './'dgr/test/file2udp.c
+dgr/test/file2udp.c: In function ‘rsend’:
+dgr/test/file2udp.c:327:2: error: ‘memcpy’ forming offset [9, 40] is out of the
+bounds [0, 8] of object ‘seqCounter’ with type ‘long int’ [-Werror=array-bounds]
+memcpy(buffer, (char *) &seqCounter, 40);
+^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+dgr/test/file2udp.c:322:14: note: ‘seqCounter’ declared here
+static long seqCounter;
+^~~~~~~~~~
+cc1: all warnings being treated as errors
+
+And the solution seemed to be changing the line to
+
+memcpy(buffer, (char *) &seqCounter, sizeof(seqCounter));
+
+Because the seqCounter is a long and only 4 bytes in length, not 40.
+
+
+
+////////////////////////////////////////////////////////
+
+https://samsclass.info/129S/proj/ion-dtn.htm
+
+Ubuntu 18.04 64bit Version
+
+
+Installing Multiple GCC Versions
+
+This section provides instructions about how to install and use multiple versions of GCC on Ubuntu 18.04. The newer versions of the GCC compiler include support for new languages, better performance and extended features.
+
+At the time of writing this article, the default Ubuntu repositories include several GCC versions, from 5.x.x to 8.x.x. The latest version of GCC, which is 9.1.0 is available from the Ubuntu Toolchain PPA.
+
+In the following example, we will install the latest three versions of GCC and G++.
+
+First, add the ubuntu-toolchain-r/test PPA to your system with:
+
+
+
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test
+
+
+Install the desired GCC and G++ versions by typing:
+
+
+sudo apt install gcc-7 g++-7 gcc-8 g++-8 gcc-9 g++-9
+
+The commands below will configure alternative for each version and associate a priority with it. The default version is the one with the highest priority, in our case that is gcc-9.
+
+
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-9 90 --slave /usr/bin/g++ g++ /usr/bin/g++-9 --slave /usr/bin/gcov gcov /usr/bin/gcov-9
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 80 --slave /usr/bin/g++ g++ /usr/bin/g++-8 --slave /usr/bin/gcov gcov /usr/bin/gcov-8
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-7 70 --slave /usr/bin/g++ g++ /usr/bin/g++-7 --slave /usr/bin/gcov gcov /usr/bin/gcov-7
+
+
+Later if you want to change the default version use the update-alternatives command:
+
+sudo update-alternatives --config gcc
+
+There are 3 choices for the alternative gcc (providing /usr/bin/gcc).
+
+  Selection    Path            Priority   Status
+------------------------------------------------------------
+* 0            /usr/bin/gcc-9   90        auto mode
+  1            /usr/bin/gcc-7   70        manual mode
+  2            /usr/bin/gcc-8   80        manual mode
+  3            /usr/bin/gcc-9   90        manual mode
+
+Press <enter> to keep the current choice[*], or type selection number:
+
+
+You will be presented with a list of all installed GCC versions on your Ubuntu system. Enter the number of the version you want to be used as a default and press Enter.
+
+The command will create symbolic links to the specific versions of GCC and G++.
+
+
+

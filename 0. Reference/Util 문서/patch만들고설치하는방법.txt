@@ -1,0 +1,84 @@
+2006-06-19
+
+ - 이 글의 목적은 리눅스에서 원본 파일을 수정한 후 배포하기위해 patch 파일을 만들고 
+  patch 된 파일을 다시 원본 파일에 적용하여 제대로 동작되는 지를 확인하기 위한 문서이다.
+  
+ - http://kltp.kldp.org/stories.php?story=02/06/23/4844278 사이트의 "patch(diff) 파일 만들고,
+ 적용시키기"를 참조하여 u-boot-1.1.4-7202에 적용하기 위함이다.
+
+ 
+ - Patch 파일 만들기(Diff를 이용한다.)
+  : diff 란? 원본과 수정된 것의 차이를 모아 파일로 저장
+  : 주의 - patch를 하기 전에 컴파일된 파일은 삭제 (make clean 등)
+  
+ u-boot-1.1.4       <-- 원본
+ u-boot-1.1.4-7202  <-- 수정된 것
+ 
+ > diff -urN u-boot-1.1.4 u-boot-1.1.4-7202 > u-boot-1.1.4.diff
+ 
+ -u : --unidirectional-new-file
+ 통일된 출력 형식을 사용. (디렉토리 비교시, 두 디렉토리중 
+ 두번째 디렉토리에만 파일이 존재한다면, 
+ 첫번째 디렉토리에는 파일이 없어도 있는 것처럼 처리한다)
+ 
+-r : --recursive, 재귀적. 하위 디렉토리를 모두 검색한다.
+-N : --new-file
+ (비교하는 디렉토리에 파일이 하나의 디렉토리에만 모두 있는 것처럼 처리하지만 
+ 사실 다른 한 디렉토리에는 파일이 없다. 새로 만든다.)
+ 
+ - diff 파일은 ASCII 형태의 파일이므로, 압축을 하면 상당히 그 양을 줄일 수 있습니다.
+ 
+ > gzip u-boot-1.1.4.diff  
+   --> u-boot-1.1.4.diff.gz 가 생성된다.
+   
+
+ - patch 파일 적용하기
+ 테스트 하기 위해 테스트 디렉토리를 만든다.
+ > cp -rv u-boot-1.1.4 u-boot-1.1.4-patch
+ 
+  그럼 이제 패치할 파일의 정보를 확인해 봅시다.
+
+  # zcat u-boot-1.1.4.diff.gz | head -3
+  
+ ------------------------------------------------------------------------------------------
+ diff -urN u-boot-1.1.4/board/abov7202/cmd_eth.c u-boot-1.1.4-7202/board/abov7202/cmd_eth.c <== 주목
+ --- u-boot-1.1.4/board/abov7202/cmd_eth.c      1970-01-01 09:00:00.000000000 +0900
+ +++ u-boot-1.1.4-7202/board/abov7202/cmd_eth.c 2006-06-19 10:45:13.000000000 +0900
+ ------------------------------------------------------------------------------------------
+ 첫 줄에 patch 만들었을 때 정보를 확인할 수 있다. 적용시킬 때는 수정본에 주목한다.
+ 
+ 확인 후에는 설치하려는 원본 파일로 이동한다.
+ 
+ > cd u-boot-1.1.4-patch
+ 
+ > zcat ../u-boot-1.1.4.diff.gz | patch -p1
+ 
+ -p1 에서 '1' 의 의미는 <수정본>에 관한 정보 " u-boot-1.1.4-patch/board/abov7202/cmd_eth.c " 에서 
+'/' 하나(디렉토리 하나)를 건너띄고 비교해서 패치를 적용시키라는 의미가 된다.
+
+ 하지만, u-boot-1.1.4-patch 디렉토리로 들어가지 않고, 패치 파일이 위와 같은 경우라면 -p0 을 사용하면 된다.
+ 
+ u-boot-1.1.4-patch에 u-boot-1.1.4.diff.gz를 패치한 후 u-boot-1.1.4를 컴파일하기 위해 
+ make abov7202_config 할때 아래와 같이 에러가 나타난다면 
+
+ [root@soctestlinux u-boot-1.1.4-patch]# make abov7202_config
+ Configuring for abov7202 board...
+ rm: cannot remove `asm': Is a directory
+ make: *** [abov7202_config] Error 1
+ 혹
+ rm: cannot remove `asm-arm/proc': Is a directory
+ make: *** [abov7202_config] Error 1
+
+ include/asm, include/asm-arm/proc 디렉토리를 삭제하면 된다.
+ 
+ > rm -rf include/asm or rm -rf include/asm-arm/proc
+ 
+ (참고) - patch 를 적용시키는데 있어서 여러 방법.
+ # zcat *****.diff.gz | patch -p1
+ # gzip -dc *****.diff.gz | patch -p1
+
+ # patch -p1 < *****.diff
+ # cat *****.diff | patch -p1
+
+
+ 

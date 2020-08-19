@@ -1,0 +1,40 @@
+>Upload
+scp -R [Local 파일 경로] [계정]@[Remote 주소]:[Remote 경로]
+-R 옵션은 Recursive를 의미하며, 디렉토리를 전송할때 붙여줍니다.
+
+
+ex>예 : 원격 서버로 index.html 파일 전송
+scp ./index.html myuser@foo.server.com:/home/workspace/index.html
+
+> Download
+scp -R [계정]@[Remote 주소]:[Remote 경로] [Local 파일 경로]
+역시 여기서도 -R 옵션은 디렉토리일 경우에만 사용합니다.
+
+>일시적으로 PATH 등록하기
+현재 열린 Shell에서만 일시적으로 PATH를 지정하기 위해서는 export라는 명령을 사용하면 됩니다.
+예를 들어, '~/compilers' 라는 경로를 PATH에 추가하기 위해서는 다음 명령을 실행하면 됩니다.
+export PATH="~/compilers:$PATH"
+Windows에서는 PATH를 구분하는 구분자가 세미콜론(;)인 데 반해, Ubuntu를 포함한 Linux에서는 콜론(:)입니다. 이에 유의하도록 합니다.
+
+>Shell 실행시 자동으로 PATH 로드하기
+위 방법으로 등록한 PATH는 현재 실행된 Shell에서만 유효하며, 다른 콘솔을 실행하면 해당 정보는 사라지게 됩니다. 컴파일러 등과 같이 지속적으로 PATH에 등록해 줘야 하는 경로는 .bashrc에 등록해 두면 콘솔 실행때마다 PATH 정보가 자동으로 갱신됩니다.
+VIM과 같은 에디터로 ~/.bashrc 파일을 열어서 맨 마지막 줄에 다음과 같이 입력하고 저장합니다.
+export PATH="(사용할 경로):$PATH"
+.bashrc 파일도 일련의 명령을 모아놓은 쉘 스크립트 파일과 다름 없으므로 입력하는 내용은 일시적으로 PATH를 등록할 때 사용하는 명령과 같습니다.
+
+
+>파티션별 용량 확인하기
+예 : 파티션별 용량을 KB 단위로 표시
+df -k
+GB 단위로 표시하기 위해서는 -k 옵션 대신 -h 옵션을 사용하면 됩니다.
+
+>디렉토리별 용량 확인하기
+예 : /home 디렉토리의 용량을 확인하려 하는 경우
+du /home
+
+
+[TeraTerm] 명령줄 인수와 공개키 인증으로 간편하게 SSH 접속하기
+==> https://www.tuwlab.com/29379
+
+>>WSL SSH 설정
+https://www.it-swarm.dev/ko/windows-10/wsl%EB%A1%9C-ssh%EB%A5%BC%ED%95%98%EB%8A%94-%EB%B2%95/944845324/

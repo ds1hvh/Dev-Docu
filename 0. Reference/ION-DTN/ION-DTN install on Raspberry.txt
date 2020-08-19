@@ -1,0 +1,42 @@
+Exactly what I was going to suggest.  The original 3.4.0 release had build problems on recent versions of Ubuntu; 
+those were fixed in the revised 3.4.0b tarfile that was posted a few days later, and those fixes were brought forward
+ into the 3.4.1 release as well.  If you still get the same error messages when you build those newer versions, 
+let us know and we’ll dig into the Makefile some more.
+
+Scott
+
+From: Nik Ansell [mailto:nikansell00@...]
+Sent: Friday, March 4, 2016 12:48 AM
+To: Fred Bourbour
+Cc: ion-dtn-users@...
+Subject: Re: [Ion-dtn-developers] [Ion-dtn-users] ION on Raspberry PI
+
+Hi Fred,
+
+I had a few problems with earlier versions of ION, but have never seen the specific errors you mention. Are these errors which prevent the make command from completing successfully, or simply warnings? Which operating system are you using?
+Do the errors indicate which file or command caused the error message?
+
+If I recall correctly "undefined reference to ..." messages refer to a linking problem, e.g. the compiler needed to find something defined in a file it was not able to find. This could possibly be a symptom of the "linking problem" Scott mentioned in a previous posting related to 3.4.0.
+
+I suggest you attempt to install the latest release (3.4.1) using the following commands (Replace the paths as required):
+
+Download and Extract
+mkdir /home/alarm/downloads/ion-3.4.1
+cd /home/alarm/downloads/ion-3.4.1
+wget http://downloads.sourceforge.net/project/ion-dtn/ion-3.4.1.tar.gz
+tar -zxvf ion-3.4.1.tar.gz
+
+Install
+cd /home/alarm/downloads/ion-3.4.1/ion-open-source
+./configure
+make -j 5
+sudo make install
+sudo ldconfig
+
+Note, you do not have to run the make command with sudo BTW, you only need sudo to run "make install". 
+I have had successful installations both installing and running everything as root and also installing and running
+ using a regular user. You may want to try the former as a troubleshooting exercise if you are not successful with 
+the instructions above.
+
+Kind Regards,
+Nik

@@ -1,0 +1,56 @@
+https://github.com/CoryCline/ICM20948.git
+
+>>pru-software-support-package
+https://github.com/rogerq/pru-software-support-package.git
+
+>> beaglebone_pru_adc
+https://github.com/pgmmpk/beaglebone_pru_adc.git
+
+>>libbbb_pruio
+https://github.com/rvega/libbbb_pruio.git
+
+>>ADC-001_basic_code
+https://github.com/brorson/ADC-001_basic_code.git
+
+https://gist.github.com/matthewmcneely/bf44655c74096ff96475
+
+>>Adafruit Beaglebone I/O Python API
+https://github.com/adafruit/adafruit-beaglebone-io-python.git
+
+>> Chapter 15: Real-Time Interfacing with the PRU-ICSS
+http://exploringbeaglebone.com/chapter15/
+
+>>bbb-mpu6050-socket-server
+https://github.com/politisj/bbb-mpu6050-socket-server.git
+
+>> mpu6050
+https://github.com/jrowberg/i2cdevlib/tree/master/Arduino/MPU6050
+
+>>ICM20948
+https://github.com/drcpattison/ICM-20948.git
+
+>>pru-i2c
+https://github.com/LinuxDroneLab/pru-i2c.git
+
+>>Beaglescope
+https://github.com/ZeekHuge/BeagleScope.git
+
+
+https://github.com/dinuxbg/pru-gcc-examples.git
+
+https://github.com/maciejjo/beaglebone-pru-dma.git
+
+
+https://github.com/luigif/hcsr04.git
+
+https://github.com/phaezah7/UART.git
+https://github.com/archie1983/AM335x_PRU_experiments.git
+https://github.com/LinuxDroneLab/pru-mpu6050-lib.git
+
+
+>IPC
+https://gist.github.com/914625.git
+https://gist.github.com/de1915e4d6502ae4c4d7.git
+
+reference site (Very useful)
+https://www.tutorialspoint.com/inter_process_communication/inter_process_communication_message_queues.htm
