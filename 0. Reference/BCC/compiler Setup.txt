@@ -1,0 +1,16 @@
+
+=================
+
+BCC is provided as a bzipped tar-file. It should be unpacked in the /opt directory of the host:
+mkdir /opt
+
+tar -C /opt -xjf sparc-elf-<version-number>.tar.bz2
+
+After installation, add /opt/sparc-elf-<gcc-version-number>/bin to the PATH variable. This should
+be done by adding the following line to the file .profile in the home directory:
+
+export PATH=/opt/sparc-elf-<gcc-version-number>/bin:$PATH
+
+source .profile
+
+출처: https://cesl.tistory.com/entry/profile-sparc-컴파일러-설정?category=466700 [Embedded Lab]
