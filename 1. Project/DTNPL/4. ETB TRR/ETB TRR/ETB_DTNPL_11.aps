@@ -1,0 +1,177 @@
+PROC DTNPL_ETB_Test
+	
+	//*******************************************************************************
+	//* File Name : ETB_DTNPL_11                                                    *
+	//* Author : Jin-Ho Jo                                                          *
+	//* Date : 2020-08-31                                                           *
+	//*******************************************************************************
+	
+	//*********** Update History ********************
+	// Version 01: Initial
+	//***********************************************
+	
+	SUB MAIN_SUB
+	
+	ACTION "DTNPL ETB Test Start?"
+	OUTPUT "DTNPL ETB Test Start"
+	OUTPUT ""
+	OUTPUT "Test Start : ", DATE$
+	OUTPUT ""
+	
+	// +------------------------------------------------+
+	// | 01: Test Setup                                 |
+	// +------------------------------------------------+
+	ACTION "Test Setup is Ready?"
+	
+	// Power ON DTNPL
+	SEND CDON
+	END SEND
+	OUTPUT "DTNPL Power is ON"
+	SLEEP 2
+	
+	// Global Transaction Enable
+	SEND CDTREN
+	END SEND
+	OUTPUT "Global Transaction Enable"
+	SLEEP 30
+	
+	// +------------------------------------------------+
+	// | 02: SOH TM (DTNPL-ETB-01)                      |
+	// +------------------------------------------------+
+	ACTION "Start SOH TM Check?"
+	SLEEP 30
+	
+	OUTPUT "=== Check SOH TM value ==="
+	//---------------------
+	// SOH TM value    
+	//---------------------
+	OUTPUT "Board Temperature: ", TDTEMPBOARD
+	OUTPUT "FPGA Temperature: ", TDTEMPFPGA
+	OUTPUT "+28V Voltage: ", TDVOLT28
+	OUTPUT "+3.3V Voltage: ", TDVOLT33
+	OUTPUT "+1.2V Voltage: ", TDVOLT10
+	OUTPUT "+28V Current: ", TDCURR28
+	OUTPUT "OBT Time: ", TDTIME
+	OUTPUT "Run Time: ", TDRUNTIME
+	OUTPUT "FPGA Version: ", TDVERFPGA
+	OUTPUT "FW Version: ", TDVERFW
+	OUTPUT "EDAC Count: ", TDEDAC
+	OUTPUT "TC Packet Count: ", TDCNTRX
+	OUTPUT "TM Packet Count: ", TDCNTTX
+	OUTPUT "Downlink Packet Count: ", TDCNTDOWN
+	OUTPUT "DTN State: ", TDDTNSTATE
+	OUTPUT "ION Version: ", TDCNTDOWN
+
+	ACTION "SOH TM is OK?"
+	SLEEP 2
+	
+	// +------------------------------------------------+
+	// | 03: Bi-level TM (DTNPL-ETB-02)                 |
+	// +------------------------------------------------+
+	ACTION "Start Bi-level TM Check?"
+	
+	// Bi-level TM Status
+	OUTPUT "Bi-level TM Status: ", TDALIVEP
+	ACTION "DTNPL is Alive?"
+	SLEEP 2
+	
+	// +------------------------------------------------+
+	// | 04: Bi-level TC (DTNPL-ETB-03)                 |
+	// +------------------------------------------------+
+	ACTION "Start Bi-level TC Test?"
+	
+	// Send Bi-level TC
+	SEND CDRESET
+	END SEND
+	SLEEP 2
+	
+	// Check DTNPL was Reset
+	OUTPUT "Run Time: ", TDRUNTIME
+	ACTION "Check Run Time was Reset?"
+	SLEEP 2	
+
+	// +------------------------------------------------+
+	// | 05: BPM Single Trip (DTNPL-ETB-04)             |
+	// +------------------------------------------------+
+	ACTION "Start BPM single trip test?"
+	ACTION "Send BPM from DCC to DTNPL"
+	ACTION "Check DCC received BPM from the DTNPL"
+	SLEEP 2
+	
+	// +------------------------------------------------+
+	// | 06: CFDP Single Trip (DTNPL-ETB-05)            |
+	// +------------------------------------------------+
+	ACTION "Start CFDP single trip test?"
+	ACTION "Start file download from DTNPL to DCC"
+	ACTION "Check file checksum is OK"
+	ACTION "Start file upload from DCC to DTNPL"
+	ACTION "Check file checksum is OK"
+	SLEEP 2
+
+	// +------------------------------------------------+
+	// | 07: BPM Round Trip (DTNPL-ETB-06)              |
+	// +------------------------------------------------+
+	ACTION "Start BPM round trip test??"
+	ACTION "Send BPM from DCC to LCM"
+	ACTION "Check LCM received BPM from the DCC"
+	ACTION "Send BPM from LCM to DCC"
+	ACTION "Check DCC received BPM from the LCM"	
+	SLEEP 2
+
+	// +------------------------------------------------+
+	// | 08: CFDP Round Trip (DTNPL-ETB-07)             |
+	// +------------------------------------------------+
+	ACTION "Start CFDP round trip test?"
+	ACTION "Start file transfer from DCC to LCM"
+	ACTION "Check received file checksum is OK"
+	ACTION "Start file transfer from LCM to DCC"
+	ACTION "Check received file checksum is OK"
+	SLEEP 2
+
+	// +------------------------------------------------+
+	// | 09: BSS Downlink (DTNPL-ETB-08)                |
+	// +------------------------------------------------+
+	ACTION "Start BSS streaming test?"
+	ACTION "Start video streaming from DTNPL to DCC"
+	ACTION "Check video is displaying on the DCC"
+	SLEEP 2
+
+	// +------------------------------------------------+
+	// | 10: Script1 TC (DTNPL-ETB-09)                 |
+	// +------------------------------------------------+
+	ACTION "Start script1 TC Test?"
+	
+	// Send scripr1 TC
+	SEND CDSCRIPT1 
+	"A1"=0x0005,   // Length of Data Field
+	"A2"=0x04,     // Command Byte
+	"A3"=0x6b696c6c6d //killm
+	END SEND
+	SLEEP 60
+	
+	// Check DTNPL was Reset
+	OUTPUT "Run Time: ", TDRUNTIME
+	ACTION "Check run time was reset"
+	SLEEP 2	
+	
+	// +------------------------------------------------+
+	// | 11: Test Close                                 |
+	// +------------------------------------------------+
+	// Global Transaction Disable
+	SEND CDTRDIS
+	END SEND
+	OUTPUT "Global Transaction Disable"	
+	SLEEP 2
+	
+	// Power OFF DTNPL
+	SEND CDOFF
+	END SEND
+	OUTPUT "DTNPL Power is OFF"
+	SLEEP 2
+	
+	END SUB
+	
+END PROC
+
+
+

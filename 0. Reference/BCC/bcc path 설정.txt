@@ -1,0 +1,7 @@
+$ nano .profile 
+
+아래의 내용 추가 
+export PATH=/opt/sparc-elf-4.4.2/bin:$PATH
+
+
+cf. 위경로에 bcc를 설치해야 됨. ( 압축을 풀 것)

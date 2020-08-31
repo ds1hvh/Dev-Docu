@@ -15,18 +15,21 @@ S/W 팀 업무 진행 사항 정리
 
 1.3 Bootloader 
 [Development Target]
-     - U-Boot Porting
-     - CRC & FW Version Check 
+     - U-Boot Porting - 20/08/28 완료
+     - CRC & FW Version Check  - 진행 중
      - H/W Revision Code Check 
        (HW Revision에 따른 F/W의 기능 변경 감지 기능)
      - F/W Update 
      - Factory Image Recovery 
      - System Healthy Check 
+     - Image Build 프로그램 개발 ( u-boot + Primary + CRC + Secondary + CRC + User-Space)
 [Progress Status]
      - U-Boot Porting 진행 중 (완료 목표 : 9/18)
        1. Initial Boot 완료 
           MMU Init이 정상적으로 되지 않음. 
-
+       2. Proto type Porting 완료 20/08/28
+          - SmartFusion2에서 동작 확인 됨. 
+       3. Flash 관련 기능 확인을 위해서는 SmartFusion2로 확인이 불가하여 
 
 2. DTNPL
   [Progress Status]  : 기능 구현은 완료 됨. 전송 속도 개선을 위한 작업 진행 중
@@ -40,7 +43,6 @@ S/W 팀 업무 진행 사항 정리
 
 3. 초분광 카메라 개발 
 3.1 S/W 업무 Action Item 정리 중
-
 
 4. 25PE
  - 외주 진행 S/W 인수 준비 중 ( 현황 파악 중)
