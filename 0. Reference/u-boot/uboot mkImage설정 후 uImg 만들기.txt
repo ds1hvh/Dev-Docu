@@ -1,0 +1,12 @@
+
+실행 화일 Compile 시 RAM Start 위치를 지정하고 Compile을 한다. 
+- ex> 0x40800000 로 설정 후 Compile 
+./sparc-rtems4.11-objcopy -R -S -O binary ~/works/4.dtnpl/ion_2.0_V1_5_for_ETB/arch-rtems/o-optimize/sbc_uboot_V1.5.4_ion_V2.0.exe hello.bin
+mkimage -A sparc -O rtems -T kernel -a 0x40800000 -e 0x40800000 -n "RTEMS" -d hello.gz hello_4080.uimg
+
+
+
+* Compile시 RAM_START 위치 확인 할 것. (0x40800000)
+./sparc-rtems4.11-objcopy -R -S -O binary hello.exe hello.bin
+cat hello.bin | gzip -9 >hello.gz
+/opt/embedded/tools/usr/bin/mkimage -A ppc -O rtems -T kernel -a 0x40800000 -e 0x40800000 -n "RTEMS" -d hello.gz hello.img
