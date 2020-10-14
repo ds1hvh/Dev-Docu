@@ -1,0 +1,145 @@
+http://doctorpapadopoulos.com/low-pass-filter-bessel-c-c-implementation/
+
+
+LOW PASS FILTER BESSEL C / C++ IMPLEMENTATION
+Savas Papadopoulos | IT | 2 Comments
+Some time ago while working on a vehicle crash simulation system we needed to simulate a Bessel low pass filter.
+
+These hardware Bessel filter are used to “smooth out” signals from a acceleration sensor. Some sensors output a pulse-width modulated signal. After letting it pass through a Bessel filter we get a pseudo integral type signal. You can use these filters with any sample rate you like. The cut off frequency is mentioned below as a factor of the actual sample rate you are using. For example, 0.04.
+
+The below code implements a Bessel 4th order low pass filter in C / C++ with double precision. Note that the so-called cut off frequency is the factor 0.04 of the sampling frequency. For example, if sampled at 10kHz, the cut off is 0.04 * 10000 = 400 Hz
+
+?
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+// cuts off at 0.04 * sampling freq
+void BesselLowpassFourthOrder004(const double source[], double dest[], int length)
+{                                                   
+    double xv[4+1] = {0.0}, 
+           yv[4+1] = {0.0};
+ 
+    for (int i = 0; i < length; i++)
+    { 
+        xv[0] = xv[1]; xv[1] = xv[2]; xv[2] = xv[3]; xv[3] = xv[4]; 
+        xv[4] = source[i] / double(1.330668083e+03);
+        yv[0] = yv[1]; yv[1] = yv[2]; yv[2] = yv[3]; yv[3] = yv[4]; 
+        yv[4] =   (xv[0] + xv[4]) + 4 * (xv[1] + xv[3]) + 6 * xv[2]
+                     + ( -0.3041592568 * yv[0]) + (  1.5960375869 * yv[1])
+                     + ( -3.1910200543 * yv[2]) + (  2.8871176889 * yv[3]);
+        dest[i] = yv[4];
+    }
+}
+Below is the same Bessel low pass filter as 3rd order:
+
+?
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+// cuts off at 0.04 * sampling freq
+void BesselLowpassThirdOrder004(const double src[], double dest[], int size)
+{
+    double xv[3+1] = {0.0};
+    double yv[3+1] = {0.0};
+ 
+    for (int i=0; i<size; i++)
+    {
+        xv[0] = xv[1]; xv[1] = xv[2]; xv[2] = xv[3]; 
+        xv[3] = src[i] / double(2.711023309e+02);
+        yv[0] = yv[1]; yv[1] = yv[2]; yv[2] = yv[3]; 
+        yv[3] = (xv[0] + xv[3]) + 3 * (xv[1] + xv[2])
+                + (  0.4226750651 * yv[0]) + ( -1.6550518354 * yv[1])
+                + (  2.2028676179 * yv[2]);
+        dest[i] = yv[3];
+    }
+}
+The same cut off frequency again but 2nd order Bessel low pass:
+
+?
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+// cuts off at 0.04 * sampling freq
+void BesselLowpassSecondOrder004(const double src[], double dest[], int size)
+{
+    double xv[2+1] = {0.0}, yv[2+1] = {0.0};
+ 
+    for (int i = 0; i < size; i++)
+    { 
+        xv[0] = xv[1]; xv[1] = xv[2]; 
+        xv[2] = src[i] / double(5.050469146e+01);
+        yv[0] = yv[1]; yv[1] = yv[2]; 
+        yv[2] = (xv[0] + xv[2]) + 2 * xv[1] + ( -0.5731643146 * yv[0]) + (  1.4939637515 * yv[1]);
+        dest[i] = yv[2];
+    }    
+}
+And this code simulates a 0.036 cut off frequency (360Hz at 10kHz sample rate), 2nd order Bessel low pass filter:
+
+?
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+// cuts off at 0.036 * sampling freq
+void BesselLowpassSecondOrder0036(const double src[], double dest[], int size)
+{
+    double xv[2+1] = {0.0}, yv[2+1] = {0.0};
+ 
+    for (int i = 0; i < size; i++)
+    { 
+        xv[0] = xv[1]; xv[1] = xv[2]; 
+        xv[2] = src[i] / double(6.089464560e+01);
+        yv[0] = yv[1]; yv[1] = yv[2]; 
+         yv[2] =   (xv[0] + xv[2]) + 2 * xv[1] + ( -0.6062613139 * yv[0]) + (  1.5405740936 * yv[1]);
+        dest[i] = yv[2];
+    }    
+}

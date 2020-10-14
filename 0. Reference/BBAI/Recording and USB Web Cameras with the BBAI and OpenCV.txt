@@ -1,0 +1,48 @@
+Hello,
+
+On the AI w/ your installed image, use these commands to get up and running.
+
+sudo apt install python-opencv python-numpy python-matplotlib
+or...
+
+sudo apt install python3-opencv python3-numpy python3-matplotlib
+That should get us our required software to use for using specific ideas revolving around numpy, matplotlib, and OpenCV.
+
+...
+
+If you want, you can use a keyboard, mouse, and your HDMI connection to the AI if needed or you can use tightvncserver along w/ PuTTY and VNC Viewer on a Windows dev. desktop.
+
+...
+
+So, if you so desire, get the source at the end of this small presentation, type python <YourFile.py> in the terminal and see glory at its finest.
+
+Recording in "high" def!
+
+So, we have all our components and tools available to get us along the journey now (hopefully). If not, take a look back at the short description.
+
+Okay, we have a USB Camera, USB Hub, USB Fan, and the AI and our source/software. Now, we need to stick our hardware together and make this source run.
+
+Seth
+
+P.S. If you look below, you will find the source for your USB Camera on the AI. Oh and if you do not use your USB Fan on the AI, it may get too hot to stay connected. It really depends on if you have followed along in the instructions from when you purchased your AI. Use the fan! Again and I repeat, USE THE FAN! Just put it over the am57xx chip or over your already attached heat sink. Hot!
+
+
+====================================================================
+import cv2
+import time
+
+cap = cv2.VideoCapture(0)
+fourcc = cv2.VideoWriter_fourcc(* 'XVID')
+out = cv2.VideoWriter('output.avi', fourcc, 20.0, (350, 350))
+
+while True:
+    ret, frame = cap.read()
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    out.write(frame)
+    cv2.imshow('gray', gray)
+    if cv2.waitKey(10) == 27:
+        break
+
+cap.release()
+out.release()
+cv2.destroyAllWindows()

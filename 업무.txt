@@ -1,56 +1,58 @@
 S/W 팀 업무 진행 사항 정리
 
-1. RTEMS 기반 개발 환경 (S/W Framework) 
-[Development Target]
-1.1 HAL Code Refactoring & Update
-    - NAND 기존 코드 개선 진행중
-    - SPI    
-    - UART
-    - Periphral DMA Driver
+SW R/R
+최상림 
+- Kernel Device Driver 
+- Bootloader
+- Embedded Application
+- Middle Ware 
+- PC Application ( UX/UI 제외)
 
-1.2 File System 
-     - JFFS2 or FAT (Using Block Device API) -> 적용 가능성 확인 중 
-[Progress Status]
-     - NAND HAL Driver Update 중
+정연조 
+- Embedded Application 
+- RTEMS Based S/W Platform
+  BSP / Device Driver
+- Build System 관리
+- 후처리 프로그램
+
+신정한 
+- PC application 
+- EGSE S/W
+- 25PE 
+- etc. 
+
+=======================================================
+SW 팀 진행 현황 
+
+1. RTEMS 기반 개발 환경 (S/W Framework) 
+1.1 HAL Code Refactoring & Update
+    - NAND Driver 성능 개선 : In progress
+    - SPI     Driver 성능 개선 : In progress
+    - Periphral DMA Driver   : Pending 
+    - SpaceWire 기능 개선    : Pending 
+    - FPGA에 구현된 기능 Step By Step 검증 : In progress
+
+1.2 개발 Framework 구축 진행 중
 
 1.3 Bootloader 
-[Development Target]
-     - U-Boot Porting - 20/08/28 완료
-     - CRC & FW Version Check  - 진행 중
-     - H/W Revision Code Check 
-       (HW Revision에 따른 F/W의 기능 변경 감지 기능)
-     - F/W Update 
-     - Factory Image Recovery 
-     - System Healthy Check 
-     - Image Build 프로그램 개발 ( u-boot + Primary + CRC + Secondary + CRC + User-Space)
-[Progress Status]
-     - U-Boot Porting 진행 중 (완료 목표 : 9/18)
-       1. Initial Boot 완료 
-          MMU Init이 정상적으로 되지 않음. 
-       2. Proto type Porting 완료 20/08/28
-          - SmartFusion2에서 동작 확인 됨. 
-       3. Flash 관련 기능 확인을 위해서는 SmartFusion2로 확인이 불가하여 
+     - 1단계 Draft Version 완료 
+     - 2단계 개발 목표
+       Debug Console을 이용한 F/W Update 기능 개발 
+       FOTA(Firmware on the air) Upgrade 기능 개발
 
 2. DTNPL
-  [Progress Status]  : 기능 구현은 완료 됨. 전송 속도 개선을 위한 작업 진행 중
-                           ( HYU 기능 구현에 종속 적이지만, 부가적으로 전송 속도 개선의 여지가 있는 부분은 루미르에 진행 하기로 함.)
-                            DTN S/W 업무는 HYU 기능 구현 완료시 까지 대기 ( Debugging 사항 발생시 F/U)
-                            EMC 시험 결과 ETRI 전달 완료 -> ETRI가 KARI의 관련 사항 협의 예정
-                            SBC-EGSE GUI 프로그램 미 구현 사항 수정 진행 중 
-  남은 업무 : Final Functional Test at KARI
-                 SBC-EGSE GUI 프로그램 납품 ( 납품 목표 : End of Stepmber)
-
+ - 기능 구현 완료.   
+ - SBC-EGSE GUI 개발 완료 
+ - ETB 진행율 50% 
+ - NAND Read / Write 속도 개선 진행 중 
 
 3. 초분광 카메라 개발 
-3.1 S/W 업무 Action Item 정리 중
 
-4. 25PE
- - 외주 진행 S/W 인수 준비 중 ( 현황 파악 중)
+4. 사내 개발 환경 구축 
+4.1 Build Server 구축 완료 
+4.2 개발 Server 구축 완료
+4.3 GIT Server 구축  ->  Pending 
 
+5. VxWorks V6.5
+  - GR712 Porting 
 
-5. 사내 개발 환경 구축 
-5.1 Build Server 구축 완료 
-  Server IP :   \\192.168.10.240
-5.2 사내 Mesh Network 구축 완료 
-5.3 GIT Server 구축  ->  Pending 
-  
