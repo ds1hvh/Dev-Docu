@@ -1,0 +1,119 @@
+Building RTEMS and its example for sparc architecture
+The purpose of this work is to show how to easily get started with RTEMS real-time operating system. In the article I will show how to compile RTEMS, compile 'Hello World' application and run it in a simulator. The example and RTEMS system itself will be compiled for sparc/erc32 architecture and will be launched in the simulator. More information about RTEMS you can find on the official site: rtems.org.
+
+
+Building the kernel.
+First of all, we should create a directory for our project. I have my own directory for projects, so I will create a new project in it:
+
+cd ~/Projects #my directory for projects
+$ mkdir ./development/rtems/kernel
+$ cd ./development/rtems/kernel
+
+At this stage we can create an alias for our development folder:
+
+$ export RTEMS_DEV=$HOME/Projects/development
+
+Now, we should obtain RTEMS distro from its git repository:
+
+$ git clone git://git.rtems.org/rtems.git
+
+Next step, we should install the tools. We need to do it, because we should compile rtems for our target system, thus, we need a cross-compiler. And cross-compiler itself is built by the build system - RSB. Let's create a directory for it:
+
+$ mkdir ./rtems/rsb
+$ cd ./rtems/rsb
+
+then, download and install it:
+
+$ git clone git://git.rtems.org/rtems-source-builder.git
+$ cd rtems-source-builder
+$ cd rtems
+$ ../source-builder/sb-set-builder --prefix=$RTEMS_DEV/rtems/4.12 4.12/rtems-sparc
+
+Let's build RTEMS itself. First of all, we should do a bootstrapping:
+
+$ cd ./../../../kernel/rtems
+$ ./bootstrap -c && ./bootstrap -p && $RTEMS_DEV/rtems/rsb/rtems-source-builder/source-builder/sb-bootstrap
+
+After that, RTEMS kernel should be configured:
+
+$ cd ../
+$ mkdir erc32
+$ cd erc32/
+$ RTEMS_DEV/rtems/kernel/rtems/configure --prefix=$RTEMS_DEV/rtems/4.12 --target=sparc-rtems4.12 --enable-rtemsbsp=erc32 --enable-posix
+
+and build:
+
+$ make -j8
+
+and installed:
+
+
+$ make install
+
+At this point we should have a built RTEMS kernel. Let's examine our results. There are three main directories:
+
+$RTEMS_DEV/rtems/4.12/bin/ - it consists of built tools, such as compiler, debugger and so on.
+
+$RTEMS_DEV/rtems/kernel/erc32/sparc-rtems4.12/erc32/lib/include/ - in this directory header files are placed.
+
+$RTEMS_DEV/rtems/kernel/erc32/sparc-rtems4.12/erc32/lib/ - in this folder there are different object files, like libbsp object file and libchip file.
+
+Building examples.
+
+First of all, we should download examples from RTEMS git repository into our $RTEMS_DEV folder:
+
+$ git clone git://git.rtems.org/examples-v2.git
+$ cd exampes-v2
+
+Let's follow the instructions in README.waf file:
+
+$ git submodule init
+$ git submodule update
+
+Now we have obtained new folder rtems_waf, which contains some scripts which support application building with waf build system.
+
+
+Before building our example application we should build rtems-tools:
+
+$ cd $RTEMS_DEV/rtems
+$ git clone git://git.rtems.org/rtems-tools.git
+$ cd ./rtems-tools
+$ ./waf configure --prefix=$RTEMS_DEV/rtems/4.12
+$ ./waf build install
+
+As a prefix we can use another location.
+
+Let's now build examples themselves:
+
+$ cd ../examples-v2
+
+If you don't have yet a path to your compiler and debugger in your PATH variable (you can check it with command 'echo $PATH'):
+
+$ export PATH=$RTEMS_DEV/rtems/4.12/bin:$PATH
+
+Now, we should configure our examples:
+
+$ cp $RTEMS_DEV/rtems/rtems-tools/waf ./
+$ chmod u+x ./waf
+$ ./waf configure --rtems=$RTEMS_DEV/rtems/4.12 \
+                          --rtems-tools=$RTEMS_DEV/rtems/4.12 \
+                          --rtems-bsps=sparc/erc32 \
+                          --rtems-version=4.12
+$ ./waf
+
+At the moment of this article writing, the building process was failing. So, let's compile a distinct example:
+
+$ cd hello/posix_hello_world/
+$ ../../waf
+$ cd ../../build/sparc-rtems4.12-erc32/hello/posix_hello_world/
+$ sparc-rtems4.12-run posix_hello.exe
+
+The output should be:
+
+*** HELLO WORLD TEST ***
+
+Hello World
+
+*** END OF HELLO WORLD TEST ***
+
+It seems, that our first application works!

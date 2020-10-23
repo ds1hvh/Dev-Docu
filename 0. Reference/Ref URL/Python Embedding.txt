@@ -1,0 +1,43 @@
+https://docs.python.org/2/extending/embedding.html#pure-embedding
+
+https://www.codeproject.com/Articles/11805/Embedding-Python-in-C-C-Part-I
+
+https://m.blog.naver.com/PostView.nhn?blogId=bowonyang&logNo=220453333114&proxyReferer=http:%2F%2Fwww.google.com%2Furl%3Fsa%3Dt%26rct%3Dj%26q%3D%26esrc%3Ds%26source%3Dweb%26cd%3D1%26ved%3D2ahUKEwi3tP3RmqjoAhWEBKYKHRpQDBcQFjAAegQIBxAB%26url%3Dhttp%253A%252F%252Fm.blog.naver.com%252Fbowonyang%252F220453333114%26usg%3DAOvVaw1xPbIga1phw5_A7elGdRjQ
+
+https://docs.python.org/ko/3/extending/embedding.html
+
+Python용 C++ 확장 만들기
+https://docs.microsoft.com/ko-kr/visualstudio/python/working-with-c-cpp-python-in-visual-studio?view=vs-2019
+
+
+
+http://docs.python.org/ext/embedding.html
+http://docs.python.org/ext/high-level-embedding.html
+
+python 을 다른 프로그램에 포함 시키는 것을 embedding 이라고 합니다
+python 기능을 확장하는 것을 extending 이라고 하고요
+보통 두가지를 동시에 사용하게 됩니다.
+임베딩은 파이썬 스크립트를 단순히 C/C++ 애플리케이션에서 실행시키는 수준에서 끝나는 것이 아니라 결과값을 받아서 사용할 수 있습니다.
+
+-------------------------------------------------------------------------------------
+
+파이썬을 실제로 유용하게 활용하고 새로시작하는 프로젝트에 적용시켜보려고
+파이썬 임베딩을 하고자 한다.
+
+파이썬 임베딩을 위한 공식문서
+http://docs.python.org/api/api.html  익스텐딩및 임베딩에 필요한 API 레퍼런스
+http://docs.python.org/ext/ext.html 익스텐딩및 임베딩에 대한 문서
+http://docs.python.org/ext/pure-embedding.html  윗 문서의 pure-embedding에 대한 부분
+
+http://www.gpgstudy.com/gpgiki/python_script  GPG의 파이썬 임베딩에 대한 문서
+
+문서들이 잘 되어 있어서 특별하게 어려운점은 없다.
+
+원래는 임베딩을 위해서 문서를 보았는데 익스텐딩에 더 관심이 간다.
+
+그러나 실 프로젝트에 파이썬을 메인으로 C나 C++을 코아모듈로 콜하는 형태는
+아직은 무리인듯 하다. 파이썬을 공부를 시작한지는 1년정도 되었지만
+실제사용하거나 프로그래밍 모듈을 작성한 경험이 많지 않아서 조심스럽다.
+
+대신 C나 C++을 메인으로 하고 필요한 부분들을 Python을 작성하고
+그 모듈을 불러쓰는 임베딩형태로는 충분할 것 같다.
