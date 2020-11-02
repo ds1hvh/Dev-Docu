@@ -1,0 +1,21 @@
+1. Install 
+$ sudo apt-get install samba samba-common-bin
+
+2. Setup 
+$ sudo nano /etc/samba/smb.conf
+
+아래의 내용 맨 아래에 삽입
+
+[pi]
+path = "삼바로 공유할 폴더 경로"
+writeable=Yes
+create mast=0777
+directory mast=0777
+public=no
+
+
+3. 사용자 설정
+$ sudo smbpasswd -a id
+
+4. 재시작
+$ sudo systemctl restart smbd
