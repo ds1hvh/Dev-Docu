@@ -1,0 +1,118 @@
+\t (00:00:45) allegro 17.2 P028 Windows SPB 64-bit Edition
+\t (00:00:45)     Journal start - Fri Aug 07 14:16:00 2020
+\t (00:00:45)         Host=LT5M6H8S2 User=a0132477 Pid=14912 CPUs=8
+\t (00:00:45) CmdLine= C:\Cadence\SPB_17.2\tools\bin\allegro.exe
+\t (00:00:45) 
+\d (00:00:45) Design opened: X:/!EVM Designs/AFE/AFE79xx_Designs.fdr/AFE7950EVM_A/DESIGN_DATA/ALLEGRO/AFE7950EVM_A.brd
+\i (00:00:55) zoom out 1 
+\i (00:00:55) setwindow pcb
+\i (00:00:55) zoom out 213.6459 -1832.4182
+\i (00:00:55) trapsize 2893891
+\i (00:00:56) zoom out 1 
+\i (00:00:56) setwindow pcb
+\i (00:00:56) zoom out 2820.5385 -9289.9308
+\i (00:00:56) trapsize 2893891
+\i (00:00:56) zoom out 1 
+\i (00:00:56) setwindow pcb
+\i (00:00:56) zoom out 2820.5385 -9289.9308
+\i (00:00:56) trapsize 2893891
+\i (00:00:56) zoom out 1 
+\i (00:00:56) setwindow pcb
+\i (00:00:56) zoom out 2820.5385 -9289.9308
+\i (00:00:56) trapsize 2893891
+\i (00:00:56) zoom out 1 
+\i (00:00:56) setwindow pcb
+\i (00:00:56) zoom out 2820.5385 -9289.9308
+\i (00:00:56) trapsize 2893891
+\i (00:00:56) zoom out 1 
+\i (00:00:56) setwindow pcb
+\i (00:00:56) zoom out 2820.5385 -9289.9308
+\i (00:00:56) trapsize 2893891
+\i (00:00:57) zoom in 1 
+\i (00:00:57) setwindow pcb
+\i (00:00:57) zoom in 1894.4935 -203.1141
+\i (00:00:57) trapsize 1446945
+\i (00:00:57) zoom out 1 
+\i (00:00:57) setwindow pcb
+\i (00:00:57) zoom out 1894.4935 -203.1140
+\i (00:00:57) trapsize 2893891
+\i (00:00:57) zoom out 1 
+\i (00:00:57) setwindow pcb
+\i (00:00:57) zoom out 1894.4935 -203.1141
+\i (00:00:57) trapsize 2893891
+\i (00:00:57) zoom in 1 
+\i (00:00:57) setwindow pcb
+\i (00:00:57) zoom in 1894.4935 -203.1141
+\i (00:00:57) trapsize 1446945
+\i (00:00:57) zoom out 1 
+\i (00:00:57) setwindow pcb
+\i (00:00:57) zoom out 1894.4935 -203.1140
+\i (00:00:57) trapsize 2893891
+\i (00:00:58) zoom in 1 
+\i (00:00:58) setwindow pcb
+\i (00:00:58) zoom in 1894.4935 -203.1141
+\i (00:00:58) trapsize 1446945
+\i (00:00:58) zoom out 1 
+\i (00:00:58) setwindow pcb
+\i (00:00:58) zoom out 1894.4935 -203.1140
+\i (00:00:58) trapsize 2893891
+\i (00:00:58) zoom in 1 
+\i (00:00:58) setwindow pcb
+\i (00:00:58) zoom in 1894.4935 -203.1141
+\i (00:00:58) trapsize 1446945
+\i (00:00:58) zoom out 1 
+\i (00:00:58) setwindow pcb
+\i (00:00:58) zoom out 1894.4935 -203.1140
+\i (00:00:58) trapsize 2893891
+\i (00:00:58) zoom in 1 
+\i (00:00:58) setwindow pcb
+\i (00:00:58) zoom in 1894.4935 -203.1141
+\i (00:00:58) trapsize 1446945
+\i (00:00:59) zoom out 1 
+\i (00:00:59) setwindow pcb
+\i (00:00:59) zoom out 1894.4935 -203.1140
+\i (00:00:59) trapsize 2893891
+\i (00:00:59) zoom in 1 
+\i (00:00:59) setwindow pcb
+\i (00:00:59) zoom in 1894.4935 -203.1141
+\i (00:00:59) trapsize 1446945
+\i (00:00:59) zoom out 1 
+\i (00:00:59) setwindow pcb
+\i (00:00:59) zoom out 1894.4935 -203.1140
+\i (00:00:59) trapsize 2893891
+\i (00:01:04) zoom out 1 
+\i (00:01:04) setwindow pcb
+\i (00:01:04) zoom out 1894.4935 -203.1141
+\i (00:01:04) trapsize 2893891
+\i (00:01:04) zoom in 1 
+\i (00:01:04) setwindow pcb
+\i (00:01:04) zoom in 1894.4935 -203.1141
+\i (00:01:04) trapsize 1446945
+\i (00:01:04) zoom in 1 
+\i (00:01:04) setwindow pcb
+\i (00:01:04) zoom in 1894.4935 -203.1140
+\i (00:01:04) trapsize 723473
+\i (00:01:04) zoom out 1 
+\i (00:01:04) setwindow pcb
+\i (00:01:04) zoom out 1894.4935 -203.1140
+\i (00:01:04) trapsize 1446945
+\i (00:01:04) zoom out 1 
+\i (00:01:04) setwindow pcb
+\i (00:01:04) zoom out 1894.4935 -203.1139
+\i (00:01:04) trapsize 2893891
+\i (00:01:06) zoom in 
+\i (00:01:06) setwindow pcb
+\i (00:01:06) zoom in 24929.8632 28.3972
+\i (00:01:06) trapsize 1446945
+\i (00:01:17) move 
+\t (00:01:17) Select element(s) to move.
+\i (00:01:18) drag_start grid 5714.4292 -434.6253
+\i (00:01:19) drag_stop 19402.5321 -347.8086
+\i (00:01:19) drag_start grid 7595.4581 1851.5483
+\i (00:01:20) drag_stop 15235.3295 1764.7316
+\i (00:01:32) zoom fit 
+\i (00:01:32) trapsize 241002
+\i (00:01:40) QtSignal ColorVisibilityPane CVPGlobalVisOn clicked
+\i (00:01:48) QtSignal CVPLayerGrid CVPBoxAllL02_Gnd clicked false
+\i (00:01:48) QtSignal CVPLayerGrid CVPBoxAllL03_Pwr1 clicked false
+\i (00:01:50) QtSignal

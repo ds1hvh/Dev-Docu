@@ -1,0 +1,64 @@
+\t (00:00:06) allegro 17.2 P028 Windows SPB 64-bit Edition
+\t (00:00:06)     Journal start - Thu Sep 17 15:46:39 2020
+\t (00:00:06)         Host=DTA0227224 User=a0132477 Pid=23828 CPUs=8
+\t (00:00:06) CmdLine= c:\cadence\spb_17.2\tools\bin\allegro.exe Y:\!EVM Designs\AFE\AFE79xx_Designs.fdr\AFE7950EVM_A\DESIGN_DATA\ALLEGRO\AFE7950EVM_A.brd
+\t (00:00:06) 
+   (00:00:07) Loading axlcore.cxt 
+\t (00:00:08) Opening existing design...
+\w (00:00:09) WARNING(SPMHDB-212): This design has functionality disabled due to the current product plus options selected. The following features are disabled: DiffPair Static Phase.  [help]
+\i (00:00:10) fillin confirm
+\d (00:00:10) Design opened: Y:/!EVM Designs/AFE/AFE79xx_Designs.fdr/AFE7950EVM_A/DESIGN_DATA/ALLEGRO/AFE7950EVM_A.brd
+\i (00:00:11) trapsize 1438953
+\i (00:00:11) trapsize 1471763
+\i (00:00:11) trapsize 1471763
+\i (00:00:15) zoom in 1 
+\i (00:00:15) setwindow pcb
+\i (00:00:15) zoom in -1588.2770 -628.4440
+\i (00:00:15) trapsize 735882
+\i (00:00:15) zoom in 1 
+\i (00:00:15) setwindow pcb
+\i (00:00:15) zoom in -1588.2770 -628.4440
+\i (00:00:15) trapsize 367941
+\i (00:00:15) zoom in 1 
+\i (00:00:15) setwindow pcb
+\i (00:00:15) zoom in -1573.5594 -628.4440
+\i (00:00:15) trapsize 183970
+\i (00:00:16) zoom out 1 
+\i (00:00:16) setwindow pcb
+\i (00:00:16) zoom out -1551.4829 -624.7645
+\i (00:00:16) trapsize 367941
+\i (00:00:21) QtSignal CVPLayerGrid CVPBoxAllTop clicked true
+\i (00:00:22) QtSignal CVPLayerGrid CVPBoxAllTop clicked false
+\i (00:00:23) QtSignal ColorVisibilityPane CVPGlobalVisOff clicked
+\i (00:00:25) QtSignal CVPLayerGrid CVPBoxAllTop clicked true
+\i (00:00:29) QtSignal CVPLayerGrid CVPBoxAllTop clicked false
+\i (00:00:31) QtSignal CVPLayerGrid CVPBoxAllBottom clicked true
+\i (00:00:32) QtSignal CVPLayerGrid CVPBoxAllBottom clicked false
+\i (00:00:34) QtSignal ColorVisibilityPane CVPGlobalVisOn clicked
+\i (00:00:39) QtSignal CVPLayerGrid CVPBoxAllTop clicked false
+\i (00:00:40) QtSignal CVPLayerGrid CVPBoxAllL02_Gnd clicked false
+\i (00:00:41) QtSignal CVPLayerGrid CVPBoxAllL03_Pwr1 clicked false
+\i (00:00:41) QtSignal CVPLayerGrid CVPBoxAllL04_Gnd2 clicked false
+\i (00:00:42) QtSignal CVPLayerGrid CVPBoxAllL05_Pwr2 clicked false
+\i (00:00:43) QtSignal CVPLayerGrid CVPBoxAllL06_Gnd3 clicked false
+\i (00:00:45) QtSignal CVPLayerGrid CVPBoxAllL07_Sig1 clicked false
+\i (00:00:46) QtSignal CVPLayerGrid CVPBoxAllL08_Sig2 clicked false
+\i (00:00:47) QtSignal CVPLayerGrid CVPBoxAllL09_Vssclk clicked false
+\i (00:00:47) QtSignal CVPLayerGrid CVPBoxAllL10_Pwr3 clicked false
+\i (00:00:48) QtSignal CVPLayerGrid CVPBoxAllL11_Gnd5 clicked false
+\i (00:00:49) QtSignal CVPLayerGrid CVPBoxAllBottom clicked false
+\i (00:00:50) QtSignal CVPLayerGrid CVPBoxAllAll clicked false
+\i (00:00:55) QtSignal ColorVisibilityPane CVPViewDropdown CurrentIndexChanged "Film: ALLOFF"
+\i (00:00:56) QtSignal ColorVisibilityPane CVPViewDropdown activated "Film: ALLOFF"
+\i (00:01:04) QtSignal ColorVisibilityPane CVPViewDropdown CurrentIndexChanged "Film: SILKTOP"
+\i (00:01:05) QtSignal ColorVisibilityPane CVPViewDropdown activated "Film: SILKTOP"
+\i (00:01:08) zoom in 1 
+\i (00:01:08) setwindow pcb
+\i (00:01:08) zoom in -1698.6593 -102.2885
+\i (00:01:08) trapsize 183970
+\i (00:01:09) zoom in 1 
+\i (00:01:09) setwindow pcb
+\i (00:01:09) zoom in -1698.6592 -102.2885
+\i (00:01:09) trapsize 91985
+\i (96:09:15) exit 
+\t (96:09:26)     Journal end - Mon Sep 21 15:55:59 2020

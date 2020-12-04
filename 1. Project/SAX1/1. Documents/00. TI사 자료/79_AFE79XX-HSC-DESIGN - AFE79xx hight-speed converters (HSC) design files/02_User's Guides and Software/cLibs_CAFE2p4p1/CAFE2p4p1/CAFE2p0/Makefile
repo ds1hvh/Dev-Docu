@@ -1,0 +1,47 @@
+
+
+TOPDIR  = .
+SRCDIR  = $(wildcard $(TOPDIR)/Afe79xx/Src)
+SRCDIR += $(wildcard $(TOPDIR)/Afe79xxUser/Src)
+SRCDIR += $(wildcard $(TOPDIR)/example)
+OBJDIR  = $(shell mkdir -p Obj; ls -d Obj)
+INCDIR1 = $(wildcard $(TOPDIR)/Afe79xx/Include)
+INCDIR2 = $(wildcard $(TOPDIR)/Afe79xxUser/Include)
+
+
+
+SRCFILES = $(foreach var,$(SRCDIR),$(shell ls -d $(var)/*.c))
+OBJFILES = $(addprefix $(OBJDIR)/,$(patsubst %.c,%.o,$(notdir $(SRCFILES))))
+CC = gcc
+
+CFLAGS = -Wall -Wextra
+IFLAGS = -I$(INCDIR1) -I$(INCDIR2)
+
+
+TARGET = test.exe
+
+VPATH = $(SRCDIR)
+
+
+$(TARGET):$(OBJFILES)
+	$(CC) -lm -o $@ $^ 
+
+$(OBJDIR)/%.o:%.c
+	$(CC) $(CFLAGS) $(IFLAGS) -o $@ -c $<
+
+clean:
+	@rm -rf $(OBJDIR)
+	@rm -rf $(TARGET)
+
+debug:
+	@echo "[TOPDIR  ][$(TOPDIR)]"
+	@echo "[SRCDIR  ][$(SRCDIR)]"
+	@echo "[OBJDIR  ][$(OBJDIR)]"
+	@echo "[INCDIR1  ][$(INCDIR1)]"
+	@echo "[INCDIR2  ][$(INCDIR2)]"
+	@echo "[SRCFILES][$(SRCFILES)]"
+	@echo "[OBJFILES][$(OBJFILES)]"
+	@echo "[CC      ][$(CC)]"
+	@echo "[CFLAGS  ][$(CFLAGS)]"
+	@echo "[IFLAGS  ][$(IFLAGS)]"
+	@echo "[VPATH   ][$(VPATH)]"

@@ -32,14 +32,14 @@ wsl 로 개발 할 경우 windows내 개발 폴더를 wsl 내부에 심볼링크
 ln -s "/mnt/d/MyWorks" /home/<my-wsl-username>/MyWorks
 
 
-rtems install path    : ~/MyWorks/rtems
+rtems install path    : /opt/rtems
 ION-DTN install path  : ~/MyWorks/ION-DTN
 
 ==============================================================
 
 1. 
-$ mkdir  –p  ~/MyWorks/rtems
-$ cd ~/MyWorks/rtems
+$ mkdir  –p  /opt/rtems
+$ cd /opt/rtems
 $ sudo apt-get update
 $ sudo apt-get upgrade
 $ sudo apt-get install build-essential
@@ -51,7 +51,7 @@ $ sudo apt-get build-dep  binutils  gcc  g++  gdb  unzip  git  python2.7-dev
 
 2. TO RSB(RTEMS Source Builder) Build
 
-$ cd /MyWorks/rtems
+$ cd /opt/rtems
 $ wget https://ftp.rtems.org/pub/rtems/releases/4.11/4.11.3/rtems-source-builder-4.11.3.tar.xz
 $ tar Jxf rtems-source-builder-4.11.3.tar.xz
 $ mv rtems-source-builder-4.11.3 rsb
@@ -61,13 +61,13 @@ $ source-builder/sb-check
 // 환경 설정이 정상적으로 되었는지 확인 한다. 정상일 경우 Enviroment is ok 표시됨. 
 
 $ cd rtems
-$ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=$HOME/MyWorks/rtems/4.11 4.11/rtems-sparc
+$ ../source-builder/sb-set-builder --log=l-sparc.txt --prefix=/opt/rtems/4.11 4.11/rtems-sparc
   
 다음 내용을 .bashrc 마지막에 추가
 $ nano ~/.bashrc
 마지막 줄에 하기 내용 삽입
-export  PATH=$HOME/MyWorks/rtems/4.11/bin:$PATH
-export  RTEMS_MAKEFILE_PATH=$HOME/MyWorks/rtems/4.11/sparc-rtems4.11/leon3
+export  PATH=/opt/rtems/4.11/bin:$PATH
+export  RTEMS_MAKEFILE_PATH=/opt/rtems/4.11/sparc-rtems4.11/leon3
 
 다음 명령을 실행하여 RSB의 sparc-rtems4.11-gcc가 제대로 동작하는지 확인
 $ source ~/.bashrc
@@ -86,23 +86,20 @@ $ ./bootstrap -p
 $ ./bootstrap
 $ $HOME/MyWorks/rtems/rtems-src/source-builder/sb-boostrap
 
-
-
 특정 bsp로 RTEMS를 빌드
-$ cd  $HOME/MyWorks/rtems
+$ cd  /opt/rtems
 $ mkdir build
 $ cd build/
 $ ../rtems-src/configure --target=sparc-rtems4.11 \
                          --enable-rtemsbsp=leon3  \
                          --enable-tests=samples   \
-                         --prefix=$HOME/MyWorks/rtems/4.11
+                         --prefix=/opt/rtems/4.11
 
 $ make && make install
 
-실행 후 sparc-rtem4.11 네부에 있는 파일을  Cross Compiler가 설치된 폴더에 복사 한다. 
+실행 후 sparc-rtem4.11 내부에 있는 파일을  Cross Compiler가 설치된 폴더에 복사 한다. 
 
-$ cp -r sparc-rtems $HOME/MyWorks/rtems/4.11
-
+$ cp -r sparc-rtems /opt/rtems/4.11
 
 마지막 configure 할 때 prefix는 RSB를 빌드할 때와 똑같이 설정해야 함, 
 
